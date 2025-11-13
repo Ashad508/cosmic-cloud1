@@ -29,7 +29,7 @@ const Index = () => {
 
       {/* Hero Section */}
       <section 
-        className="relative py-32 px-4 overflow-hidden"
+        className="relative py-32 md:py-40 px-4 overflow-hidden"
         style={{
           backgroundImage: `url(${heroBackground})`,
           backgroundSize: "cover",
@@ -37,12 +37,15 @@ const Index = () => {
         }}
       >
         <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
-        <div className="container mx-auto text-center relative z-10">
-          <h2 className="text-5xl md:text-7xl font-bold mb-6 text-cosmic-gradient">
+        <div className="container mx-auto text-center relative z-10 max-w-5xl">
+          <h2 className="text-5xl md:text-7xl font-bold mb-6 text-cosmic-gradient leading-tight">
             Welcome to Cosmic Cloud
           </h2>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Premium Minecraft & VPS Hosting with Ultra-Fast Performance
+          <p className="text-xl md:text-2xl text-foreground/80 mb-4 max-w-3xl mx-auto leading-relaxed">
+            Premium Minecraft & VPS Hosting Solutions
+          </p>
+          <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Experience ultra-fast performance with enterprise-grade infrastructure, DDoS protection, and 99.9% uptime guarantee
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button 
@@ -67,25 +70,39 @@ const Index = () => {
       </section>
 
       {/* VPS Section */}
-      <section id="vps" className="py-20 px-4">
+      <section id="vps" className="py-20 px-4 bg-background">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient">VPS Hosting</h2>
-            <p className="text-xl text-muted-foreground">High-performance virtual private servers</p>
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
+              <Server className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">VPS Hosting</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
+              Virtual Private Servers
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              High-performance KVM VPS with dedicated resources, NVMe storage, and enterprise-grade security
+            </p>
           </div>
 
           <Tabs defaultValue="intel" className="max-w-6xl mx-auto">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="intel">Intel Xeon Platinum</TabsTrigger>
-              <TabsTrigger value="amd">AMD EPYC</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-8 h-auto p-1">
+              <TabsTrigger value="intel" className="py-3 text-base font-semibold">
+                <Cpu className="w-4 h-4 mr-2" />
+                Intel Xeon Platinum
+              </TabsTrigger>
+              <TabsTrigger value="amd" className="py-3 text-base font-semibold">
+                <Cpu className="w-4 h-4 mr-2" />
+                AMD Ryzen
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="intel" className="space-y-8">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">Intel Xeon Platinum VPS</h3>
-                <p className="text-muted-foreground">
-                  High-performance VPS hosting with ultra-fast NVMe storage and stable bandwidth. 
-                  Perfect for Minecraft, bots, and web hosting! ⚡
+              <div className="text-center mb-8 max-w-2xl mx-auto">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">Intel Xeon Platinum VPS</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  Enterprise-grade performance with Intel Xeon Platinum processors, ultra-fast NVMe storage, 
+                  and unlimited bandwidth. Perfect for Minecraft servers, Discord bots, and web applications ⚡
                 </p>
               </div>
 
@@ -153,15 +170,76 @@ const Index = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="amd">
-              <div className="text-center py-20">
-                <div className="max-w-md mx-auto p-8 bg-card border border-border rounded-lg cosmic-glow">
-                  <Cpu className="w-16 h-16 text-primary mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold mb-2">AMD EPYC Coming Soon</h3>
-                  <p className="text-muted-foreground">
-                    We're working hard to bring you powerful AMD EPYC VPS hosting. Stay tuned!
-                  </p>
+            <TabsContent value="amd" className="space-y-8">
+              <div className="text-center mb-8 max-w-2xl mx-auto">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3 text-foreground">AMD Ryzen VPS</h3>
+                <p className="text-base text-muted-foreground leading-relaxed">
+                  Superior performance with AMD Ryzen processors, ultra-fast NVMe storage, 
+                  and unlimited bandwidth. Ideal for resource-intensive applications and high-traffic websites ⚡
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                <PricingCard
+                  title="Plan 1"
+                  specs={[
+                    { label: "vCPU Cores", value: "2" },
+                    { label: "RAM", value: "8 GB" },
+                    { label: "NVMe Disk", value: "100 GB" },
+                    { label: "Bandwidth", value: "8 TB" },
+                  ]}
+                  price="2,600"
+                />
+                <PricingCard
+                  title="Plan 2"
+                  featured
+                  specs={[
+                    { label: "vCPU Cores", value: "4" },
+                    { label: "RAM", value: "16 GB" },
+                    { label: "NVMe Disk", value: "200 GB" },
+                    { label: "Bandwidth", value: "16 TB" },
+                  ]}
+                  price="3,600"
+                />
+                <PricingCard
+                  title="Plan 3"
+                  specs={[
+                    { label: "vCPU Cores", value: "8" },
+                    { label: "RAM", value: "32 GB" },
+                    { label: "NVMe Disk", value: "500 GB" },
+                    { label: "Bandwidth", value: "32 TB" },
+                  ]}
+                  price="9,000"
+                />
+              </div>
+
+              <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+                <h4 className="text-xl font-bold mb-4 text-primary">All VPS servers include:</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-primary" />
+                    <span>Level 5 DDoS Protection</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-primary" />
+                    <span>Full Root Access</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Gauge className="w-5 h-5 text-primary" />
+                    <span>Deploy Within Minutes</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Server className="w-5 h-5 text-primary" />
+                    <span>IPv4 Dedicated</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-primary" />
+                    <span>99.9% Uptime Guarantee</span>
+                  </div>
                 </div>
+                <p className="mt-6 text-sm text-muted-foreground">
+                  ⚠️ Notice: Please follow our Rules to keep your service active.
+                </p>
               </div>
             </TabsContent>
           </Tabs>
@@ -171,15 +249,31 @@ const Index = () => {
       {/* Minecraft Section */}
       <section id="minecraft" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient">Minecraft Hosting</h2>
-            <p className="text-xl text-muted-foreground">Optimized servers for the ultimate Minecraft experience 🕸️</p>
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 border border-secondary/20 rounded-full mb-4">
+              <Cpu className="w-4 h-4 text-secondary" />
+              <span className="text-sm font-semibold text-secondary uppercase tracking-wider">Minecraft Hosting</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
+              Minecraft Game Servers
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Optimized game servers with instant deployment, automated backups, and dedicated support 🕸️
+            </p>
           </div>
 
           <Tabs defaultValue="intel" className="max-w-7xl mx-auto">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
-              <TabsTrigger value="intel">Intel Xeon Platinum (India)</TabsTrigger>
-              <TabsTrigger value="amd">AMD EPYC Milan (India)</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-8 h-auto p-1">
+              <TabsTrigger value="intel" className="py-3 text-base font-semibold">
+                <Cpu className="w-4 h-4 mr-2" />
+                Intel Xeon Platinum
+                <span className="ml-2 text-xs text-muted-foreground">(India)</span>
+              </TabsTrigger>
+              <TabsTrigger value="amd" className="py-3 text-base font-semibold">
+                <Cpu className="w-4 h-4 mr-2" />
+                AMD EPYC Milan
+                <span className="ml-2 text-xs text-muted-foreground">(India)</span>
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="intel" className="space-y-8">
@@ -330,9 +424,17 @@ const Index = () => {
       {/* Contact Section */}
       <section id="contact" className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient">Get in Touch</h2>
-            <p className="text-xl text-muted-foreground">Need help? We're here for you!</p>
+          <div className="text-center mb-12 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
+              <MessageSquare className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Contact Us</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
+              Get in Touch
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Need assistance? Our support team is ready to help you 24/7
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12">
