@@ -109,6 +109,7 @@ const Index = () => {
               <div className="grid md:grid-cols-3 gap-6">
                 <PricingCard
                   title="Plan 1"
+                  delay={0}
                   specs={[
                     { label: "vCPU Cores", value: "2" },
                     { label: "RAM", value: "8 GB" },
@@ -120,6 +121,7 @@ const Index = () => {
                 <PricingCard
                   title="Plan 2"
                   featured
+                  delay={100}
                   specs={[
                     { label: "vCPU Cores", value: "4" },
                     { label: "RAM", value: "16 GB" },
@@ -130,6 +132,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Plan 3"
+                  delay={200}
                   specs={[
                     { label: "vCPU Cores", value: "8" },
                     { label: "RAM", value: "32 GB" },
@@ -182,6 +185,7 @@ const Index = () => {
               <div className="grid md:grid-cols-3 gap-6">
                 <PricingCard
                   title="Plan 1"
+                  delay={0}
                   specs={[
                     { label: "vCPU Cores", value: "2" },
                     { label: "RAM", value: "8 GB" },
@@ -193,6 +197,7 @@ const Index = () => {
                 <PricingCard
                   title="Plan 2"
                   featured
+                  delay={100}
                   specs={[
                     { label: "vCPU Cores", value: "4" },
                     { label: "RAM", value: "16 GB" },
@@ -203,6 +208,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Plan 3"
+                  delay={200}
                   specs={[
                     { label: "vCPU Cores", value: "8" },
                     { label: "RAM", value: "32 GB" },
@@ -280,6 +286,7 @@ const Index = () => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 <PricingCard
                   title="Stone Plan 👋"
+                  delay={0}
                   specs={[
                     { label: "Memory", value: "2 GB" },
                     { label: "Disk", value: "2 GB" },
@@ -293,6 +300,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Copper Plan ⚔️"
+                  delay={80}
                   specs={[
                     { label: "Memory", value: "7 GB" },
                     { label: "Disk", value: "9 GB" },
@@ -307,6 +315,7 @@ const Index = () => {
                 <PricingCard
                   title="Iron Plan 🔥"
                   featured
+                  delay={160}
                   specs={[
                     { label: "Memory", value: "11 GB" },
                     { label: "Disk", value: "12 GB" },
@@ -320,6 +329,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Obsidian Plan 🥇"
+                  delay={240}
                   specs={[
                     { label: "Memory", value: "16 GB" },
                     { label: "Disk", value: "17 GB" },
@@ -333,6 +343,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Bedrock Plan 🎯"
+                  delay={320}
                   specs={[
                     { label: "Memory", value: "Unlimited" },
                     { label: "Disk", value: "Unlimited" },
@@ -351,6 +362,7 @@ const Index = () => {
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 <PricingCard
                   title="Stone Plan 👋"
+                  delay={0}
                   specs={[
                     { label: "Memory", value: "2 GB" },
                     { label: "Disk", value: "2 GB" },
@@ -364,6 +376,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Copper Plan ⚔️"
+                  delay={80}
                   specs={[
                     { label: "Memory", value: "7 GB" },
                     { label: "Disk", value: "9 GB" },
@@ -378,6 +391,7 @@ const Index = () => {
                 <PricingCard
                   title="Iron Plan 🔥"
                   featured
+                  delay={160}
                   specs={[
                     { label: "Memory", value: "11 GB" },
                     { label: "Disk", value: "12 GB" },
@@ -391,6 +405,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Obsidian Plan 🥇"
+                  delay={240}
                   specs={[
                     { label: "Memory", value: "16 GB" },
                     { label: "Disk", value: "17 GB" },
@@ -404,6 +419,7 @@ const Index = () => {
                 />
                 <PricingCard
                   title="Bedrock Plan 🎯"
+                  delay={320}
                   specs={[
                     { label: "Memory", value: "Unlimited" },
                     { label: "Disk", value: "Unlimited" },

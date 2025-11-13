@@ -11,9 +11,10 @@ interface PricingCardProps {
   price: string;
   currency?: string;
   featured?: boolean;
+  delay?: number;
 }
 
-export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = false }: PricingCardProps) => {
+export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = false, delay = 0 }: PricingCardProps) => {
   const handlePurchase = () => {
     window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank");
   };
@@ -23,6 +24,7 @@ export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = 
       className={`relative p-6 transition-all duration-300 hover:scale-105 cosmic-glow-hover animate-scale-in ${
         featured ? "border-primary cosmic-glow" : "border-border"
       }`}
+      style={{ animationDelay: `${delay}ms` }}
     >
       {featured && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
