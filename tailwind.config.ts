@@ -57,6 +57,10 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        cosmic: {
+          glow: "hsl(var(--cosmic-glow))",
+          "glow-secondary": "hsl(var(--cosmic-glow-secondary))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
