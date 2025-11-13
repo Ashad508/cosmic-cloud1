@@ -20,7 +20,7 @@ export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = 
 
   return (
     <Card 
-      className={`relative p-6 transition-all duration-300 hover:scale-105 cosmic-glow-hover ${
+      className={`relative p-6 transition-all duration-300 hover:scale-105 cosmic-glow-hover animate-scale-in ${
         featured ? "border-primary cosmic-glow" : "border-border"
       }`}
     >
