@@ -3,10 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingCard } from "@/components/PricingCard";
 import { Server, Cpu, HardDrive, Gauge, Shield, Zap, Mail, MessageSquare } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroBackground from "@/assets/hero-background.jpg";
 import cosmicLogo from "@/assets/cosmic-cloud-logo.png";
+import Footer from "@/components/Footer";
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -22,7 +26,8 @@ const Index = () => {
           <nav className="hidden md:flex gap-6">
             <a href="#vps" className="text-foreground hover:text-primary transition-colors">VPS</a>
             <a href="#minecraft" className="text-foreground hover:text-primary transition-colors">Minecraft</a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors">Contact</a>
+            <button onClick={() => navigate('/about')} className="text-foreground hover:text-primary transition-colors">About</button>
+            <button onClick={() => navigate('/contact')} className="text-foreground hover:text-primary transition-colors">Contact</button>
           </nav>
         </div>
       </header>
@@ -486,17 +491,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-8 px-4">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <img src={cosmicLogo} alt="Cosmic Cloud" className="w-8 h-8" />
-            <span className="text-xl font-bold text-cosmic-gradient">Cosmic Cloud</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            © 2024 Cosmic Cloud. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
