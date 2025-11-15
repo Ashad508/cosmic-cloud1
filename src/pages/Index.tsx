@@ -26,6 +26,7 @@ const Index = () => {
           <nav className="hidden md:flex gap-6">
             <a href="#vps" className="text-foreground hover:text-primary transition-colors">VPS</a>
             <a href="#minecraft" className="text-foreground hover:text-primary transition-colors">Minecraft</a>
+            <a href="https://panel.lazycloud.fun/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors">cPanel</a>
             <button onClick={() => navigate('/about')} className="text-foreground hover:text-primary transition-colors">About</button>
             <button onClick={() => navigate('/contact')} className="text-foreground hover:text-primary transition-colors">Contact</button>
           </nav>
