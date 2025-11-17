@@ -85,6 +85,14 @@ const Footer = () => {
                   Terms of Service
                 </button>
               </li>
+              <li>
+                <button 
+                  onClick={() => navigate('/admin')}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Admin Portal
+                </button>
+              </li>
             </ul>
           </div>
         </div>
