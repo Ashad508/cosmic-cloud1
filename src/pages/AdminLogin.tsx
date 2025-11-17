@@ -10,11 +10,22 @@ import { Loader2, Shield } from "lucide-react";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Seed admin user on component mount
+    const initAdmin = async () => {
+      try {
+        await supabase.functions.invoke('seed-admin');
+      } catch (error) {
+        console.error('Failed to initialize admin:', error);
+      }
+    };
+    
+    initAdmin();
+
     // Check if already logged in
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -40,6 +51,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
+      const email = username + '@admin.local';
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -87,13 +99,13 @@ const AdminLogin = () => {
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="admin@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="Ashadumar"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
                 disabled={loading}
               />
