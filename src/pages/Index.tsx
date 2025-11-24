@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingCard } from "@/components/PricingCard";
@@ -7,9 +7,73 @@ import { useNavigate } from "react-router-dom";
 import heroBackground from "@/assets/hero-background.jpg";
 import cosmicLogo from "@/assets/cosmic-cloud-logo.png";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('price', { ascending: true });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load products",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getProductsByCategory = (category: string) => {
+    return products.filter(p => p.category.toLowerCase().includes(category.toLowerCase()));
+  };
+
+  const renderProductCards = (categoryProducts: any[], currency: string = "PKR") => {
+    if (loading) {
+      return <div className="text-center py-12">Loading products...</div>;
+    }
+    
+    if (categoryProducts.length === 0) {
+      return <div className="text-center py-12 text-muted-foreground">No products available</div>;
+    }
+
+    return categoryProducts.map((product, index) => {
+      const specs = product.features?.map((feature: string) => {
+        const [label, value] = feature.split(':').map((s: string) => s.trim());
+        return { label: label || feature, value: value || '' };
+      }) || [];
+
+      return (
+        <PricingCard
+          key={product.id}
+          title={product.name}
+          delay={index * 80}
+          specs={specs}
+          price={product.price.toString()}
+          currency={currency}
+          featured={index === 1}
+        />
+      );
+    });
+  };
   
   return (
     <div className="min-h-screen bg-background">
@@ -113,40 +177,7 @@ const Index = () => {
               </div>
 
               <div className="grid md:grid-cols-3 gap-6">
-                <PricingCard
-                  title="Plan 1"
-                  delay={0}
-                  specs={[
-                    { label: "vCPU Cores", value: "2" },
-                    { label: "RAM", value: "8 GB" },
-                    { label: "NVMe Disk", value: "100 GB" },
-                    { label: "Bandwidth", value: "8 TB" },
-                  ]}
-                  price="1,600"
-                />
-                <PricingCard
-                  title="Plan 2"
-                  featured
-                  delay={100}
-                  specs={[
-                    { label: "vCPU Cores", value: "4" },
-                    { label: "RAM", value: "16 GB" },
-                    { label: "NVMe Disk", value: "200 GB" },
-                    { label: "Bandwidth", value: "16 TB" },
-                  ]}
-                  price="2,600"
-                />
-                <PricingCard
-                  title="Plan 3"
-                  delay={200}
-                  specs={[
-                    { label: "vCPU Cores", value: "8" },
-                    { label: "RAM", value: "32 GB" },
-                    { label: "NVMe Disk", value: "500 GB" },
-                    { label: "Bandwidth", value: "32 TB" },
-                  ]}
-                  price="8,000"
-                />
+                {renderProductCards(getProductsByCategory('VPS Intel'))}
               </div>
 
               <div className="mt-12 p-6 bg-card border border-border rounded-lg">
@@ -189,40 +220,7 @@ const Index = () => {
               </div>
 
               <div className="grid md:grid-cols-3 gap-6">
-                <PricingCard
-                  title="Plan 1"
-                  delay={0}
-                  specs={[
-                    { label: "vCPU Cores", value: "2" },
-                    { label: "RAM", value: "8 GB" },
-                    { label: "NVMe Disk", value: "100 GB" },
-                    { label: "Bandwidth", value: "8 TB" },
-                  ]}
-                  price="2,600"
-                />
-                <PricingCard
-                  title="Plan 2"
-                  featured
-                  delay={100}
-                  specs={[
-                    { label: "vCPU Cores", value: "4" },
-                    { label: "RAM", value: "16 GB" },
-                    { label: "NVMe Disk", value: "200 GB" },
-                    { label: "Bandwidth", value: "16 TB" },
-                  ]}
-                  price="3,600"
-                />
-                <PricingCard
-                  title="Plan 3"
-                  delay={200}
-                  specs={[
-                    { label: "vCPU Cores", value: "8" },
-                    { label: "RAM", value: "32 GB" },
-                    { label: "NVMe Disk", value: "500 GB" },
-                    { label: "Bandwidth", value: "32 TB" },
-                  ]}
-                  price="9,000"
-                />
+                {renderProductCards(getProductsByCategory('VPS AMD'))}
               </div>
 
               <div className="mt-12 p-6 bg-card border border-border rounded-lg">
@@ -290,153 +288,13 @@ const Index = () => {
 
             <TabsContent value="intel" className="space-y-8 animate-fade-in">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                <PricingCard
-                  title="Stone Plan 👋"
-                  delay={0}
-                  specs={[
-                    { label: "Memory", value: "2 GB" },
-                    { label: "Disk", value: "2 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "100%" },
-                    { label: "Backup", value: "1" },
-                    { label: "Allocations", value: "0" },
-                  ]}
-                  price="200"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Copper Plan ⚔️"
-                  delay={80}
-                  specs={[
-                    { label: "Memory", value: "7 GB" },
-                    { label: "Disk", value: "9 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "150%" },
-                    { label: "Backup", value: "2" },
-                    { label: "Allocations", value: "1" },
-                  ]}
-                  price="600"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Iron Plan 🔥"
-                  featured
-                  delay={160}
-                  specs={[
-                    { label: "Memory", value: "11 GB" },
-                    { label: "Disk", value: "12 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "300%" },
-                    { label: "Backup", value: "4" },
-                    { label: "Allocations", value: "1" },
-                  ]}
-                  price="1000"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Obsidian Plan 🥇"
-                  delay={240}
-                  specs={[
-                    { label: "Memory", value: "16 GB" },
-                    { label: "Disk", value: "17 GB" },
-                    { label: "Cores", value: "3" },
-                    { label: "CPU Load", value: "400%" },
-                    { label: "Backup", value: "5" },
-                    { label: "Allocations", value: "2" },
-                  ]}
-                  price="1600"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Bedrock Plan 🎯"
-                  delay={320}
-                  specs={[
-                    { label: "Memory", value: "Unlimited" },
-                    { label: "Disk", value: "Unlimited" },
-                    { label: "Cores", value: "Unlimited" },
-                    { label: "CPU Load", value: "Unlimited" },
-                    { label: "Backup", value: "Unlimited" },
-                    { label: "Allocations", value: "Unlimited" },
-                  ]}
-                  price="5000"
-                  currency="PKR"
-                />
+                {renderProductCards(getProductsByCategory('Minecraft Intel'), 'PKR')}
               </div>
             </TabsContent>
 
             <TabsContent value="amd" className="space-y-8 animate-fade-in">
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                <PricingCard
-                  title="Stone Plan 👋"
-                  delay={0}
-                  specs={[
-                    { label: "Memory", value: "2 GB" },
-                    { label: "Disk", value: "2 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "100%" },
-                    { label: "Backup", value: "1" },
-                    { label: "Allocations", value: "0" },
-                  ]}
-                  price="500"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Copper Plan ⚔️"
-                  delay={80}
-                  specs={[
-                    { label: "Memory", value: "7 GB" },
-                    { label: "Disk", value: "9 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "150%" },
-                    { label: "Backup", value: "2" },
-                    { label: "Allocations", value: "1" },
-                  ]}
-                  price="900"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Iron Plan 🔥"
-                  featured
-                  delay={160}
-                  specs={[
-                    { label: "Memory", value: "11 GB" },
-                    { label: "Disk", value: "12 GB" },
-                    { label: "Cores", value: "1" },
-                    { label: "CPU Load", value: "300%" },
-                    { label: "Backup", value: "4" },
-                    { label: "Allocations", value: "1" },
-                  ]}
-                  price="1300"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Obsidian Plan 🥇"
-                  delay={240}
-                  specs={[
-                    { label: "Memory", value: "16 GB" },
-                    { label: "Disk", value: "17 GB" },
-                    { label: "Cores", value: "3" },
-                    { label: "CPU Load", value: "400%" },
-                    { label: "Backup", value: "5" },
-                    { label: "Allocations", value: "2" },
-                  ]}
-                  price="1900"
-                  currency="PKR"
-                />
-                <PricingCard
-                  title="Bedrock Plan 🎯"
-                  delay={320}
-                  specs={[
-                    { label: "Memory", value: "Unlimited" },
-                    { label: "Disk", value: "Unlimited" },
-                    { label: "Cores", value: "Unlimited" },
-                    { label: "CPU Load", value: "Unlimited" },
-                    { label: "Backup", value: "Unlimited" },
-                    { label: "Allocations", value: "Unlimited" },
-                  ]}
-                  price="5300"
-                  currency="PKR"
-                />
+                {renderProductCards(getProductsByCategory('Minecraft AMD'), 'PKR')}
               </div>
             </TabsContent>
           </Tabs>
