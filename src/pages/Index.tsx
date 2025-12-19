@@ -3,8 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingCard } from "@/components/PricingCard";
 import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import heroBackground from "@/assets/hero-background.jpg";
-import cosmicLogo from "@/assets/cosmic-cloud-logo.png";
+import heroBackground from "@/assets/hero-cosmic-bg.jpg";
+import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 import Footer from "@/components/Footer";
 
 // VPS Plans - Intel Xeon
