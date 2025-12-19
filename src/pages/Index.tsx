@@ -1,11 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingCard } from "@/components/PricingCard";
-import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock } from "lucide-react";
+import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroBackground from "@/assets/hero-cosmic-bg.jpg";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 import Footer from "@/components/Footer";
+
+// Domain Plans
+const domainPlans = [
+  {
+    extension: ".com",
+    price: "2,699",
+    description: "The classic, professional domain trusted worldwide.",
+    popular: true,
+  },
+  {
+    extension: ".fun",
+    price: "400",
+    description: "Perfect for memes, communities, and fun projects!",
+    popular: false,
+  },
+  {
+    extension: ".net",
+    price: "5,000",
+    description: "Reliable, fast, and trusted by tech-focused sites.",
+    popular: false,
+  },
+];
 
 // VPS Plans - Intel Xeon
 const vpsIntelPlans = [
@@ -250,70 +272,80 @@ const Index = () => {
   const navigate = useNavigate();
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-cosmic-mesh">
       {/* Announcement Banner */}
-      <div className="bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 border-b border-primary/30">
-        <div className="container mx-auto px-4 py-3 text-center">
-          <p className="text-sm md:text-base font-semibold text-foreground">
-            🚀 <span className="text-primary">New Year Update 2026</span> — Upcoming! Stay tuned for exciting new features! 🎉
+      <div className="relative overflow-hidden border-b border-primary/30">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-secondary/20"></div>
+        <div className="absolute inset-0 diagonal-lines opacity-20"></div>
+        <div className="container mx-auto px-4 py-3 text-center relative">
+          <p className="text-sm md:text-base font-bold font-display tracking-wider text-foreground">
+            <span className="text-accent animate-pulse-slow">★</span>
+            {" "}<span className="text-primary">NEW YEAR UPDATE 2026</span>{" "}
+            <span className="text-muted-foreground">—</span>{" "}
+            <span className="text-secondary">UPCOMING</span>{" "}
+            <span className="text-accent animate-pulse-slow">★</span>
           </p>
         </div>
       </div>
 
       {/* Header */}
-      <header className="border-b border-border backdrop-blur-sm sticky top-0 z-50 bg-background/80">
+      <header className="border-b border-border/50 backdrop-blur-md sticky top-0 z-50 bg-background/90">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={cosmicLogo} alt="Cosmic Cloud" className="w-12 h-12" />
+            <img src={cosmicLogo} alt="Cosmic Cloud" className="w-14 h-14 rounded-lg cosmic-glow" />
             <div>
-              <h1 className="text-2xl font-bold text-cosmic-gradient">Cosmic Cloud</h1>
-              <p className="text-xs text-muted-foreground">Premium Hosting Solutions</p>
+              <h1 className="text-2xl font-display font-bold text-cosmic-gradient tracking-wider">COSMIC CLOUD</h1>
+              <p className="text-xs text-muted-foreground font-body tracking-wide">Premium Hosting Solutions</p>
             </div>
           </div>
-          <nav className="hidden md:flex gap-6">
-            <a href="#vps" className="text-foreground hover:text-primary transition-colors">VPS</a>
-            <a href="#minecraft" className="text-foreground hover:text-primary transition-colors">Minecraft</a>
-            <a href="#website" className="text-foreground hover:text-primary transition-colors">Website</a>
-            <a href="#boost" className="text-foreground hover:text-primary transition-colors">Boost Plans</a>
-            <button onClick={() => navigate('/about')} className="text-foreground hover:text-primary transition-colors">About</button>
-            <button onClick={() => navigate('/contact')} className="text-foreground hover:text-primary transition-colors">Contact</button>
+          <nav className="hidden md:flex gap-8">
+            <a href="#vps" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">VPS</a>
+            <a href="#minecraft" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">MINECRAFT</a>
+            <a href="#website" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">WEBSITE</a>
+            <a href="#domains" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">DOMAINS</a>
+            <a href="#boost" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">BOOSTS</a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
       <section 
-        className="relative py-32 md:py-40 px-4 overflow-hidden"
+        className="relative py-28 md:py-36 px-4 overflow-hidden"
         style={{
           backgroundImage: `url(${heroBackground})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background"></div>
+        <div className="absolute inset-0 bg-cosmic-mesh"></div>
         <div className="container mx-auto text-center relative z-10 max-w-5xl">
-          <h2 className="text-5xl md:text-7xl font-bold mb-6 text-cosmic-gradient leading-tight">
-            Welcome to Cosmic Cloud
+          <div className="inline-block mb-6 px-4 py-2 border border-primary/40 rounded-full bg-primary/10 backdrop-blur-sm">
+            <span className="text-primary font-display text-sm tracking-widest">POWERED BY PERFORMANCE</span>
+          </div>
+          <h2 className="text-5xl md:text-7xl font-display font-bold mb-6 text-cosmic-gradient leading-tight tracking-tight">
+            WELCOME TO<br />COSMIC CLOUD
           </h2>
-          <p className="text-xl md:text-2xl text-foreground/80 mb-4 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl md:text-2xl text-foreground/90 mb-4 max-w-3xl mx-auto leading-relaxed font-body font-medium">
             Premium Minecraft, VPS & Web Hosting Solutions
           </p>
-          <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto font-body">
             Experience ultra-fast performance with enterprise-grade infrastructure, DDoS protection, and 99.9% uptime guarantee
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Button 
               size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 cosmic-glow"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 cosmic-glow font-display tracking-wider px-8"
               onClick={() => document.getElementById('vps')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Server className="mr-2 h-5 w-5" />
-              Explore VPS
+              EXPLORE VPS
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              className="border-primary text-primary hover:bg-primary/10"
+              className="border-secondary text-secondary hover:bg-secondary/10 font-display tracking-wider px-8"
               onClick={() => document.getElementById('minecraft')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Cpu className="mr-2 h-5 w-5" />
@@ -502,6 +534,72 @@ const Index = () => {
                 delay={index * 80}
               />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Domain Plans Section */}
+      <section id="domains" className="py-20 px-4 bg-muted/20 relative overflow-hidden">
+        <div className="absolute inset-0 diagonal-lines opacity-5"></div>
+        <div className="container mx-auto relative">
+          <div className="text-center mb-12 max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/30 rounded-full mb-4">
+              <Globe className="w-4 h-4 text-accent" />
+              <span className="text-sm font-display font-semibold text-accent uppercase tracking-widest">DOMAIN REGISTRATION</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-cosmic-gradient leading-tight tracking-tight">
+              DOMAIN PLANS
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed font-body">
+              Secure your perfect domain with Cosmic Cloud protection
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {domainPlans.map((domain, index) => (
+              <div 
+                key={domain.extension}
+                className={`relative p-8 rounded-lg transition-all duration-300 card-glow ${
+                  domain.popular 
+                    ? 'bg-gradient-to-b from-primary/20 to-card border-2 border-primary cosmic-glow' 
+                    : 'bg-card border border-border hover:border-primary/50'
+                }`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                {domain.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-display font-bold tracking-wider">
+                      POPULAR
+                    </span>
+                  </div>
+                )}
+                <div className="text-center">
+                  <h3 className="text-4xl font-display font-bold text-cosmic-gradient mb-2">{domain.extension}</h3>
+                  <div className="flex items-baseline justify-center gap-1 mb-4">
+                    <span className="text-3xl font-display font-bold text-foreground">{domain.price}</span>
+                    <span className="text-muted-foreground font-body">PKR/year</span>
+                  </div>
+                  <p className="text-muted-foreground font-body mb-6">{domain.description}</p>
+                  <div className="flex items-center justify-center gap-2 text-sm text-primary mb-6">
+                    <Lock className="w-4 h-4" />
+                    <span className="font-body">Free SSL Certificate Included</span>
+                  </div>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-wider"
+                    onClick={() => window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank")}
+                  >
+                    REGISTER NOW
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 p-6 bg-card/50 border border-accent/30 rounded-lg max-w-3xl mx-auto text-center backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-2 text-accent font-display font-semibold">
+              <Shield className="w-5 h-5" />
+              <span>All Domains Are In Secure Protection From Cosmic Cloud</span>
+            </div>
           </div>
         </div>
       </section>
