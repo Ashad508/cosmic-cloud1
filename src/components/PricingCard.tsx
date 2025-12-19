@@ -23,26 +23,26 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
 
   return (
     <Card 
-      className={`relative p-6 transition-all duration-300 hover:scale-105 cosmic-glow-hover animate-scale-in ${
-        featured ? "border-primary cosmic-glow" : "border-border"
+      className={`relative p-6 transition-all duration-300 hover:scale-[1.02] card-glow ${
+        featured ? "border-primary cosmic-glow bg-gradient-to-b from-primary/10 to-card" : "border-border hover:border-primary/50"
       }`}
       style={{ animationDelay: `${delay}ms` }}
     >
       {featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-display font-bold tracking-wider">
           POPULAR
         </div>
       )}
       
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold mb-2 text-cosmic-gradient">{title}</h3>
+        <h3 className="text-xl font-display font-bold mb-2 text-cosmic-gradient tracking-wide">{title}</h3>
       </div>
 
       <div className="space-y-3 mb-6">
         {specs.map((spec, index) => (
           <div key={index} className="flex items-center gap-2">
             <Check className="w-4 h-4 text-primary flex-shrink-0" />
-            <span className="text-sm">
+            <span className="text-sm font-body">
               <span className="text-muted-foreground">{spec.label}:</span>{" "}
               <span className="text-foreground font-semibold">{spec.value}</span>
             </span>
@@ -50,16 +50,14 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
         ))}
       </div>
 
-      <div className="mb-4 pt-4 border-t border-border">
+      <div className="mb-4 pt-4 border-t border-border/50">
         <div className="text-center">
           {isBoostPlan ? (
-            <>
-              <span className="text-3xl font-bold text-primary">{price}</span>
-            </>
+            <span className="text-2xl font-display font-bold text-primary">{price}</span>
           ) : (
             <>
-              <span className="text-3xl font-bold text-primary">{price}</span>
-              <span className="text-muted-foreground ml-1">{currency} / month</span>
+              <span className="text-2xl font-display font-bold text-primary">{price}</span>
+              <span className="text-muted-foreground text-sm font-body ml-1">{currency}/mo</span>
             </>
           )}
         </div>
@@ -67,9 +65,9 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
 
       <Button 
         onClick={handlePurchase}
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-bold"
+        className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-display font-bold tracking-wider text-sm"
       >
-        Purchase Now
+        PURCHASE NOW
       </Button>
     </Card>
   );
