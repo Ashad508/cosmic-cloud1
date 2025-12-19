@@ -3,7 +3,6 @@ import cosmicLogo from "@/assets/cosmic-cloud-logo.png";
 
 const Footer = () => {
   const navigate = useNavigate();
-  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-card border-t border-border mt-20">
@@ -19,7 +18,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed max-w-md">
-              Enterprise-grade VPS and Minecraft hosting with DDoS protection, 99.9% uptime guarantee, 
+              Enterprise-grade VPS, Minecraft, and Web hosting with DDoS protection, 99.9% uptime guarantee, 
               and 24/7 support.
             </p>
           </div>
@@ -54,7 +53,7 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://discord.com/channels/1413463825851875328/1413463826896126056"
+                  href="https://discord.gg/qsptvww8xX"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
@@ -85,21 +84,13 @@ const Footer = () => {
                   Terms of Service
                 </button>
               </li>
-              <li>
-                <button 
-                  onClick={() => navigate('/admin')}
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Admin Portal
-                </button>
-              </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border text-center text-muted-foreground text-sm">
-          <p>© {currentYear} Cosmic Cloud. All rights reserved.</p>
+          <p>© 2026 Cosmic Cloud. All rights reserved.</p>
         </div>
       </div>
     </footer>
