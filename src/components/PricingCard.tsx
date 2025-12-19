@@ -14,10 +14,12 @@ interface PricingCardProps {
   delay?: number;
 }
 
-export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = false, delay = 0 }: PricingCardProps) => {
+export const PricingCard = ({ title, specs, price, currency = "PKR", featured = false, delay = 0 }: PricingCardProps) => {
   const handlePurchase = () => {
     window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank");
   };
+
+  const isBoostPlan = price.includes("Boost");
 
   return (
     <Card 
@@ -50,8 +52,16 @@ export const PricingCard = ({ title, specs, price, currency = "Rs.", featured = 
 
       <div className="mb-4 pt-4 border-t border-border">
         <div className="text-center">
-          <span className="text-3xl font-bold text-primary">{price}</span>
-          <span className="text-muted-foreground ml-1">{currency} / month</span>
+          {isBoostPlan ? (
+            <>
+              <span className="text-3xl font-bold text-primary">{price}</span>
+            </>
+          ) : (
+            <>
+              <span className="text-3xl font-bold text-primary">{price}</span>
+              <span className="text-muted-foreground ml-1">{currency} / month</span>
+            </>
+          )}
         </div>
       </div>
 
