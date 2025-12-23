@@ -399,11 +399,16 @@ const Index = () => {
               </div>
 
               <div className="mt-12 p-6 bg-card border border-border rounded-lg">
-                <h4 className="text-xl font-bold mb-4 text-primary">All VPS servers include:</h4>
+                <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+                  <h4 className="text-xl font-bold text-primary">All VPS servers include:</h4>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/30 rounded-full">
+                    <span className="text-sm font-display font-bold text-accent tracking-wide">Powered by OVH Cloud</span>
+                  </div>
+                </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <Shield className="w-5 h-5 text-primary" />
-                    <span>Level 5 DDoS Protection</span>
+                    <span className="font-semibold">Layer 7 DDoS Protection</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Zap className="w-5 h-5 text-primary" />
@@ -420,6 +425,10 @@ const Index = () => {
                   <div className="flex items-center gap-2">
                     <Shield className="w-5 h-5 text-primary" />
                     <span>99.9% Uptime Guarantee</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-5 h-5 text-primary" />
+                    <span>Enterprise-Grade Security</span>
                   </div>
                 </div>
                 <p className="mt-6 text-sm text-muted-foreground">
