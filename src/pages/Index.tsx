@@ -70,13 +70,13 @@ const minecraftPlans = [
     title: "Stone Plan",
     specs: [
       { label: "Memory", value: "2 GB" },
-      { label: "Disk", value: "2 GB" },
+      { label: "Disk", value: "6 GB" },
       { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "100%" },
+      { label: "CPU Load", value: "110%" },
       { label: "Backup", value: "1" },
       { label: "Allocations", value: "0" },
     ],
-    price: "200",
+    price: "170",
   },
   {
     title: "Copper Plan",
@@ -88,31 +88,31 @@ const minecraftPlans = [
       { label: "Backup", value: "2" },
       { label: "Allocations", value: "1" },
     ],
-    price: "600",
+    price: "520",
   },
   {
     title: "Iron Plan",
     specs: [
-      { label: "Memory", value: "11 GB" },
-      { label: "Disk", value: "12 GB" },
-      { label: "Cores", value: "1" },
+      { label: "Memory", value: "12 GB" },
+      { label: "Disk", value: "23 GB" },
+      { label: "Cores", value: "2" },
       { label: "CPU Load", value: "300%" },
       { label: "Backup", value: "4" },
       { label: "Allocations", value: "1" },
     ],
-    price: "1,000",
+    price: "800",
   },
   {
     title: "Obsidian Plan",
     specs: [
       { label: "Memory", value: "16 GB" },
-      { label: "Disk", value: "17 GB" },
+      { label: "Disk", value: "29 GB" },
       { label: "Cores", value: "3" },
       { label: "CPU Load", value: "400%" },
       { label: "Backup", value: "5" },
       { label: "Allocations", value: "2" },
     ],
-    price: "1,600",
+    price: "1,100",
   },
   {
     title: "Bedrock Plan",
@@ -124,71 +124,7 @@ const minecraftPlans = [
       { label: "Backup", value: "Unlimited" },
       { label: "Allocations", value: "Unlimited" },
     ],
-    price: "5,000",
-  },
-];
-
-// MC Dedicated Plans
-const mcDedicatedPlans = [
-  {
-    title: "Stone Plan",
-    specs: [
-      { label: "Memory", value: "2 GB" },
-      { label: "Disk", value: "2 GB" },
-      { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "100%" },
-      { label: "Backup", value: "1" },
-      { label: "Allocations", value: "0" },
-    ],
-    price: "500",
-  },
-  {
-    title: "Copper Plan",
-    specs: [
-      { label: "Memory", value: "7 GB" },
-      { label: "Disk", value: "9 GB" },
-      { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "150%" },
-      { label: "Backup", value: "2" },
-      { label: "Allocations", value: "1" },
-    ],
-    price: "900",
-  },
-  {
-    title: "Iron Plan",
-    specs: [
-      { label: "Memory", value: "11 GB" },
-      { label: "Disk", value: "12 GB" },
-      { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "300%" },
-      { label: "Backup", value: "4" },
-      { label: "Allocations", value: "1" },
-    ],
-    price: "1,300",
-  },
-  {
-    title: "Obsidian Plan",
-    specs: [
-      { label: "Memory", value: "16 GB" },
-      { label: "Disk", value: "17 GB" },
-      { label: "Cores", value: "3" },
-      { label: "CPU Load", value: "400%" },
-      { label: "Backup", value: "5" },
-      { label: "Allocations", value: "2" },
-    ],
-    price: "1,900",
-  },
-  {
-    title: "Bedrock Plan",
-    specs: [
-      { label: "Memory", value: "Unlimited" },
-      { label: "Disk", value: "Unlimited" },
-      { label: "Cores", value: "Unlimited" },
-      { label: "CPU Load", value: "Unlimited" },
-      { label: "Backup", value: "Unlimited" },
-      { label: "Allocations", value: "Unlimited" },
-    ],
-    price: "5,300",
+    price: "4,500",
   },
 ];
 
@@ -492,57 +428,26 @@ const Index = () => {
               <span className="text-sm font-semibold text-secondary uppercase tracking-wider">Minecraft Hosting</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              Minecraft Plans
+              Minecraft Server Plans
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Optimized game servers with instant deployment, automated backups, and dedicated support 🎮
             </p>
           </div>
 
-          <Tabs defaultValue="shared" className="max-w-7xl mx-auto">
-            <TabsList className="grid w-full grid-cols-2 mb-8 h-auto p-1">
-              <TabsTrigger value="shared" className="py-3 text-base font-semibold">
-                <Database className="w-4 h-4 mr-2" />
-                Shared Plans
-              </TabsTrigger>
-              <TabsTrigger value="dedicated" className="py-3 text-base font-semibold">
-                <Server className="w-4 h-4 mr-2" />
-                Dedicated Plans
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="shared" className="space-y-8 animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                {minecraftPlans.map((plan, index) => (
-                  <PricingCard
-                    key={plan.title}
-                    title={plan.title}
-                    specs={plan.specs}
-                    price={plan.price}
-                    currency="PKR"
-                    featured={index === 2}
-                    delay={index * 80}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="dedicated" className="space-y-8 animate-fade-in">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                {mcDedicatedPlans.map((plan, index) => (
-                  <PricingCard
-                    key={plan.title + "-ded"}
-                    title={plan.title}
-                    specs={plan.specs}
-                    price={plan.price}
-                    currency="PKR"
-                    featured={index === 2}
-                    delay={index * 80}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
+            {minecraftPlans.map((plan, index) => (
+              <PricingCard
+                key={plan.title}
+                title={plan.title}
+                specs={plan.specs}
+                price={plan.price}
+                currency="PKR"
+                featured={index === 2}
+                delay={index * 80}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
