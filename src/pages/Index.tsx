@@ -1,12 +1,13 @@
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PricingCard } from "@/components/PricingCard";
-import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock, Lock } from "lucide-react";
+import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock, Lock, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroBackground from "@/assets/hero-cosmic-bg.jpg";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 import Footer from "@/components/Footer";
-
+import CosmicBlastIntro from "@/components/CosmicBlastIntro";
 // Domain Plans
 const domainPlans = [
   {
@@ -270,47 +271,62 @@ const boostPlans = [
 
 const Index = () => {
   const navigate = useNavigate();
+  const [showIntro, setShowIntro] = useState(true);
+
+  const handleIntroComplete = useCallback(() => {
+    setShowIntro(false);
+  }, []);
   
   return (
-    <div className="min-h-screen bg-background bg-cosmic-mesh">
+    <div className="min-h-screen bg-background bg-cosmic-mesh stars-bg">
+      {/* Cosmic Blast Intro Animation */}
+      {showIntro && <CosmicBlastIntro onComplete={handleIntroComplete} />}
+
       {/* Announcement Banner */}
-      <div className="relative overflow-hidden border-b border-primary/30">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/10 to-secondary/20"></div>
-        <div className="absolute inset-0 diagonal-lines opacity-20"></div>
-        <div className="container mx-auto px-4 py-3 text-center relative">
-          <p className="text-sm md:text-base font-bold font-display tracking-wider text-foreground">
-            <span className="text-accent animate-pulse-slow">★</span>
-            {" "}<span className="text-primary">NEW YEAR UPDATE 2026</span>{" "}
-            <span className="text-muted-foreground">—</span>{" "}
-            <span className="text-secondary">UPCOMING</span>{" "}
-            <span className="text-accent animate-pulse-slow">★</span>
-          </p>
+      <div className="relative overflow-hidden border-b border-primary/40 meteor-trail">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/15 to-accent/20 holographic"></div>
+        <div className="absolute inset-0 diagonal-lines opacity-10"></div>
+        <div className="container mx-auto px-4 py-4 text-center relative">
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Sparkles className="w-5 h-5 text-accent animate-pulse" />
+            <p className="text-sm md:text-base font-bold font-display tracking-widest text-foreground">
+              <span className="text-primary neon-text">COSMIC BLAST</span>
+              <span className="mx-2 text-foreground/50">•</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-primary animate-pulse">2026</span>
+              <span className="mx-2 text-foreground/50">•</span>
+              <span className="text-secondary">UPCOMING</span>
+            </p>
+            <Sparkles className="w-5 h-5 text-accent animate-pulse" />
+          </div>
         </div>
       </div>
 
       {/* Header */}
-      <header className="border-b border-border/50 backdrop-blur-md sticky top-0 z-50 bg-background/90">
+      <header className="border-b border-primary/20 backdrop-blur-xl sticky top-0 z-50 bg-background/80">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={cosmicLogo} alt="Cosmic Cloud" className="w-14 h-14 rounded-lg cosmic-glow" />
+            <div className="relative">
+              <img src={cosmicLogo} alt="Cosmic Cloud" className="w-14 h-14 rounded-xl cosmic-glow" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent rounded-xl blur opacity-30 animate-pulse-slow"></div>
+            </div>
             <div>
-              <h1 className="text-2xl font-display font-bold text-cosmic-gradient tracking-wider">COSMIC CLOUD</h1>
-              <p className="text-xs text-muted-foreground font-body tracking-wide">Premium Hosting Solutions</p>
+              <h1 className="text-2xl font-display font-black text-cosmic-gradient tracking-widest">COSMIC CLOUD</h1>
+              <p className="text-xs text-primary/70 font-display tracking-[0.2em]">BLAST INTO THE FUTURE</p>
             </div>
           </div>
           <nav className="hidden md:flex gap-8">
-            <a href="#vps" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">VPS</a>
-            <a href="#minecraft" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">MINECRAFT</a>
-            <a href="#website" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">WEBSITE</a>
-            <a href="#domains" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">DOMAINS</a>
-            <a href="#boost" className="text-foreground hover:text-primary transition-colors font-display text-sm tracking-wider">BOOSTS</a>
+            <a href="#vps" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">VPS</a>
+            <a href="#minecraft" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">MINECRAFT</a>
+            <a href="#website" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">WEBSITE</a>
+            <a href="#domains" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">DOMAINS</a>
+            <a href="#boost" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">BOOSTS</a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
       <section 
-        className="relative py-28 md:py-36 px-4 overflow-hidden"
+        className="relative py-32 md:py-44 px-4 overflow-hidden"
         style={{
           backgroundImage: `url(${heroBackground})`,
           backgroundSize: "cover",
@@ -318,25 +334,40 @@ const Index = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/80 to-background"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background"></div>
         <div className="absolute inset-0 bg-cosmic-mesh"></div>
+        
+        {/* Floating particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-float opacity-60" style={{ animationDelay: "0s" }}></div>
+          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-secondary rounded-full animate-float opacity-80" style={{ animationDelay: "0.5s" }}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-accent rounded-full animate-float opacity-70" style={{ animationDelay: "1s" }}></div>
+          <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-primary rounded-full animate-float opacity-50" style={{ animationDelay: "1.5s" }}></div>
+        </div>
+
         <div className="container mx-auto text-center relative z-10 max-w-5xl">
-          <div className="inline-block mb-6 px-4 py-2 border border-primary/40 rounded-full bg-primary/10 backdrop-blur-sm">
-            <span className="text-primary font-display text-sm tracking-widest">POWERED BY PERFORMANCE</span>
+          <div className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-primary/50 rounded-full bg-primary/10 backdrop-blur-md animate-glow-pulse">
+            <Rocket className="w-4 h-4 text-primary animate-pulse" />
+            <span className="text-primary font-display text-sm tracking-[0.3em]">COSMIC BLAST 2026</span>
+            <Rocket className="w-4 h-4 text-primary animate-pulse" />
           </div>
-          <h2 className="text-5xl md:text-7xl font-display font-bold mb-6 text-cosmic-gradient leading-tight tracking-tight">
-            WELCOME TO<br />COSMIC CLOUD
+          <h2 className="text-6xl md:text-8xl font-display font-black mb-6 text-cosmic-gradient leading-none tracking-tight">
+            WELCOME TO<br />
+            <span className="relative">
+              COSMIC CLOUD
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 blur-2xl -z-10"></div>
+            </span>
           </h2>
-          <p className="text-xl md:text-2xl text-foreground/90 mb-4 max-w-3xl mx-auto leading-relaxed font-body font-medium">
+          <p className="text-xl md:text-2xl text-foreground/95 mb-4 max-w-3xl mx-auto leading-relaxed font-body font-semibold">
             Premium Minecraft, VPS & Web Hosting Solutions
           </p>
-          <p className="text-base md:text-lg text-muted-foreground mb-10 max-w-2xl mx-auto font-body">
-            Experience ultra-fast performance with enterprise-grade infrastructure, DDoS protection, and 99.9% uptime guarantee
+          <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto font-body">
+            Experience ultra-fast performance with enterprise-grade infrastructure, Layer 7 DDoS protection, and 99.9% uptime guarantee
           </p>
-          <div className="flex gap-4 justify-center flex-wrap">
+          <div className="flex gap-5 justify-center flex-wrap">
             <Button 
               size="lg" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90 cosmic-glow font-display tracking-wider px-8"
+              className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary cosmic-glow font-display tracking-widest px-10 py-6 text-base animate-glow-pulse"
               onClick={() => document.getElementById('vps')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Server className="mr-2 h-5 w-5" />
@@ -345,11 +376,11 @@ const Index = () => {
             <Button 
               size="lg" 
               variant="outline"
-              className="border-secondary text-secondary hover:bg-secondary/10 font-display tracking-wider px-8"
+              className="border-secondary/60 text-secondary hover:bg-secondary/10 hover:border-secondary font-display tracking-widest px-10 py-6 text-base"
               onClick={() => document.getElementById('minecraft')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Cpu className="mr-2 h-5 w-5" />
-              Minecraft Hosting
+              MINECRAFT HOSTING
             </Button>
           </div>
         </div>
