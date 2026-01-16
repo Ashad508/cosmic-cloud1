@@ -5,6 +5,9 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  // For GitHub Pages: set base to your repo name (e.g., '/cosmic-cloud/')
+  // Leave as '/' for custom domain or root deployment
+  base: process.env.GITHUB_ACTIONS ? '/cosmic-cloud/' : '/',
   server: {
     host: "::",
     port: 8080,
