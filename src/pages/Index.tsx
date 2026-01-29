@@ -1,645 +1,593 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PricingCard } from "@/components/PricingCard";
-import { Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, HardDrive, Gauge, Database, Clock, Lock, Sparkles } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import heroBackground from "@/assets/hero-cosmic-bg.jpg";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import { 
+  Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, 
+  HardDrive, Gauge, Database, Clock, Lock, Check, ChevronRight,
+  Users, Activity, Timer, Infinity, Bot, ArrowLeft
+} from "lucide-react";
 import Footer from "@/components/Footer";
-import CosmicBlastIntro from "@/components/CosmicBlastIntro";
-// Domain Plans
-const domainPlans = [
-  {
-    extension: ".com",
-    price: "2,699",
-    description: "The classic, professional domain trusted worldwide.",
-    popular: true,
-  },
-  {
-    extension: ".fun",
-    price: "400",
-    description: "Perfect for memes, communities, and fun projects!",
-    popular: false,
-  },
-  {
-    extension: ".net",
-    price: "5,000",
-    description: "Reliable, fast, and trusted by tech-focused sites.",
-    popular: false,
-  },
-];
+import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 
 // VPS Plans - Intel Xeon
 const vpsIntelPlans = [
   {
-    title: "Plan 1",
-    specs: [
-      { label: "vCPU Cores", value: "2" },
-      { label: "RAM", value: "8 GB" },
-      { label: "NVMe Disk", value: "100 GB" },
-      { label: "Bandwidth", value: "8 TB" },
-    ],
+    name: "Stone",
+    ram: "8 GB",
+    cpu: "2 vCPU",
+    storage: "100 GB NVMe",
+    bandwidth: "8 TB",
     price: "1,600",
   },
   {
-    title: "Plan 2",
-    specs: [
-      { label: "vCPU Cores", value: "4" },
-      { label: "RAM", value: "16 GB" },
-      { label: "NVMe Disk", value: "200 GB" },
-      { label: "Bandwidth", value: "16 TB" },
-    ],
+    name: "Diamond",
+    ram: "16 GB",
+    cpu: "4 vCPU",
+    storage: "200 GB NVMe",
+    bandwidth: "16 TB",
     price: "2,600",
+    featured: true,
   },
   {
-    title: "Plan 3",
-    specs: [
-      { label: "vCPU Cores", value: "8" },
-      { label: "RAM", value: "32 GB" },
-      { label: "NVMe Disk", value: "500 GB" },
-      { label: "Bandwidth", value: "32 TB" },
-    ],
+    name: "Netherite",
+    ram: "32 GB",
+    cpu: "8 vCPU",
+    storage: "500 GB NVMe",
+    bandwidth: "32 TB",
     price: "8,000",
   },
 ];
 
 // Minecraft Plans
 const minecraftPlans = [
-  {
-    title: "Stone Plan",
-    specs: [
-      { label: "Memory", value: "2 GB" },
-      { label: "Disk", value: "6 GB" },
-      { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "110%" },
-      { label: "Backup", value: "1" },
-      { label: "Allocations", value: "0" },
-    ],
-    price: "170",
-  },
-  {
-    title: "Copper Plan",
-    specs: [
-      { label: "Memory", value: "7 GB" },
-      { label: "Disk", value: "9 GB" },
-      { label: "Cores", value: "1" },
-      { label: "CPU Load", value: "150%" },
-      { label: "Backup", value: "2" },
-      { label: "Allocations", value: "1" },
-    ],
-    price: "520",
-  },
-  {
-    title: "Iron Plan",
-    specs: [
-      { label: "Memory", value: "12 GB" },
-      { label: "Disk", value: "23 GB" },
-      { label: "Cores", value: "2" },
-      { label: "CPU Load", value: "300%" },
-      { label: "Backup", value: "4" },
-      { label: "Allocations", value: "1" },
-    ],
-    price: "800",
-  },
-  {
-    title: "Obsidian Plan",
-    specs: [
-      { label: "Memory", value: "16 GB" },
-      { label: "Disk", value: "29 GB" },
-      { label: "Cores", value: "3" },
-      { label: "CPU Load", value: "400%" },
-      { label: "Backup", value: "5" },
-      { label: "Allocations", value: "2" },
-    ],
-    price: "1,100",
-  },
-  {
-    title: "Bedrock Plan",
-    specs: [
-      { label: "Memory", value: "Unlimited" },
-      { label: "Disk", value: "Unlimited" },
-      { label: "Cores", value: "Unlimited" },
-      { label: "CPU Load", value: "Unlimited" },
-      { label: "Backup", value: "Unlimited" },
-      { label: "Allocations", value: "Unlimited" },
-    ],
-    price: "4,500",
-  },
+  { name: "Stone", ram: "2 GB", disk: "6 GB", cores: "1", cpu: "110%", backups: "1", ports: "0", price: "170" },
+  { name: "Copper", ram: "7 GB", disk: "9 GB", cores: "1", cpu: "150%", backups: "2", ports: "1", price: "520" },
+  { name: "Iron", ram: "12 GB", disk: "23 GB", cores: "2", cpu: "300%", backups: "4", ports: "1", price: "800", featured: true },
+  { name: "Obsidian", ram: "16 GB", disk: "29 GB", cores: "3", cpu: "400%", backups: "5", ports: "2", price: "1,100" },
+  { name: "Bedrock", ram: "Unlimited", disk: "Unlimited", cores: "Unlimited", cpu: "Unlimited", backups: "Unlimited", ports: "Unlimited", price: "4,500" },
 ];
 
-// Website Plans
-const websitePlans = [
-  {
-    title: "Starter Plan",
-    specs: [
-      { label: "Websites", value: "1" },
-      { label: "Disk", value: "10 GB SSD" },
-      { label: "DDoS", value: "Fully Protected" },
-      { label: "WordPress", value: "100%" },
-      { label: "Backup", value: "Weekly" },
-      { label: "Domain", value: "Free Included" },
-    ],
-    price: "1,399",
-  },
-  {
-    title: "Pro Plan",
-    specs: [
-      { label: "Websites", value: "10" },
-      { label: "Disk", value: "80 GB SSD" },
-      { label: "DDoS", value: "Fully Protected" },
-      { label: "WordPress", value: "100%" },
-      { label: "Backup", value: "Weekly" },
-      { label: "Domain", value: "Free Included" },
-    ],
-    price: "3,000",
-  },
-  {
-    title: "Cloud Plan",
-    specs: [
-      { label: "Websites", value: "100+" },
-      { label: "Disk", value: "1 TB SSD" },
-      { label: "DDoS", value: "Fully Protected" },
-      { label: "WordPress", value: "100%" },
-      { label: "Backup", value: "Daily" },
-      { label: "Domain", value: "Free .fun Domain" },
-    ],
-    price: "9,000",
-  },
+// Bot Hosting Plans
+const botPlans = [
+  { name: "Starter", ram: "512 MB", cpu: "50%", disk: "2 GB", price: "99" },
+  { name: "Standard", ram: "1 GB", cpu: "100%", disk: "5 GB", price: "199", featured: true },
+  { name: "Premium", ram: "2 GB", cpu: "150%", disk: "10 GB", price: "399" },
 ];
 
-// Discord Boost Plans
-const boostPlans = [
-  {
-    title: "1X Boost",
-    specs: [
-      { label: "RAM", value: "2 GB" },
-      { label: "CPU", value: "100%" },
-      { label: "Disk", value: "10 GB" },
-      { label: "Duration", value: "Lifetime*" },
-    ],
-    price: "1 Boost",
-    isBoost: true,
-  },
-  {
-    title: "2X Boost",
-    specs: [
-      { label: "RAM", value: "4 GB" },
-      { label: "CPU", value: "150%" },
-      { label: "Disk", value: "15 GB" },
-      { label: "Duration", value: "Lifetime*" },
-    ],
-    price: "2 Boosts",
-    isBoost: true,
-  },
-  {
-    title: "4X Boost",
-    specs: [
-      { label: "RAM", value: "6 GB" },
-      { label: "CPU", value: "200%" },
-      { label: "Disk", value: "20 GB" },
-      { label: "Duration", value: "Lifetime*" },
-    ],
-    price: "4 Boosts",
-    isBoost: true,
-  },
+// Web Hosting Plans
+const webPlans = [
+  { name: "Starter", sites: "1", disk: "10 GB SSD", ssl: "Free", backup: "Weekly", price: "1,399" },
+  { name: "Pro", sites: "10", disk: "80 GB SSD", ssl: "Free", backup: "Weekly", price: "3,000", featured: true },
+  { name: "Cloud", sites: "100+", disk: "1 TB SSD", ssl: "Free", backup: "Daily", price: "9,000" },
 ];
+
+type ViewType = "home" | "minecraft" | "vps" | "bot" | "web" | "contact";
 
 const Index = () => {
-  const navigate = useNavigate();
-  const [showIntro, setShowIntro] = useState(true);
+  const [activeView, setActiveView] = useState<ViewType>("home");
 
-  const handleIntroComplete = useCallback(() => {
-    setShowIntro(false);
-  }, []);
-  
+  const navigateTo = (view: ViewType) => {
+    setActiveView(view);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="min-h-screen bg-background bg-cosmic-mesh stars-bg">
-      {/* Cosmic Blast Intro Animation */}
-      {showIntro && <CosmicBlastIntro onComplete={handleIntroComplete} />}
-
-      {/* Announcement Banner */}
-      <div className="relative overflow-hidden border-b border-primary/40 meteor-trail">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/15 to-accent/20 holographic"></div>
-        <div className="absolute inset-0 diagonal-lines opacity-10"></div>
-        <div className="container mx-auto px-4 py-4 text-center relative">
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <Sparkles className="w-5 h-5 text-accent animate-pulse" />
-            <p className="text-sm md:text-base font-bold font-display tracking-widest text-foreground">
-              <span className="text-primary neon-text">COSMIC BLAST</span>
-              <span className="mx-2 text-foreground/50">•</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-secondary to-primary animate-pulse">2026</span>
-              <span className="mx-2 text-foreground/50">•</span>
-              <span className="text-secondary">UPCOMING</span>
-            </p>
-            <Sparkles className="w-5 h-5 text-accent animate-pulse" />
-          </div>
-        </div>
-      </div>
-
-      {/* Header */}
-      <header className="border-b border-primary/20 backdrop-blur-xl sticky top-0 z-50 bg-background/80">
+    <div className="min-h-screen bg-background">
+      {/* Navigation */}
+      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <img src={cosmicLogo} alt="Cosmic Cloud" className="w-14 h-14 rounded-xl cosmic-glow" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-accent rounded-xl blur opacity-30 animate-pulse-slow"></div>
-            </div>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigateTo("home")}>
+            <img src={cosmicLogo} alt="Slayer Nodes" className="w-10 h-10 rounded-lg" />
             <div>
-              <h1 className="text-2xl font-display font-black text-cosmic-gradient tracking-widest">COSMIC CLOUD</h1>
-              <p className="text-xs text-primary/70 font-display tracking-[0.2em]">BLAST INTO THE FUTURE</p>
+              <h1 className="text-xl font-bold text-gradient">Slayer Nodes</h1>
+              <span className="text-xs text-muted-foreground">Enterprise</span>
             </div>
           </div>
-          <nav className="hidden md:flex gap-8">
-            <a href="#vps" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">VPS</a>
-            <a href="#minecraft" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">MINECRAFT</a>
-            <a href="#website" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">WEBSITE</a>
-            <a href="#domains" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">DOMAINS</a>
-            <a href="#boost" className="text-foreground hover:text-primary transition-all font-display text-sm tracking-wider hover:drop-shadow-[0_0_8px_hsl(var(--primary))]">BOOSTS</a>
+
+          <nav className="hidden md:flex items-center gap-6">
+            <button onClick={() => navigateTo("home")} className="text-sm text-muted-foreground hover:text-foreground transition">Home</button>
+            <button onClick={() => navigateTo("minecraft")} className="text-sm text-muted-foreground hover:text-foreground transition">Minecraft</button>
+            <button onClick={() => navigateTo("vps")} className="text-sm text-muted-foreground hover:text-foreground transition">VPS</button>
+            <button onClick={() => navigateTo("bot")} className="text-sm text-muted-foreground hover:text-foreground transition">Bot</button>
+            <button onClick={() => navigateTo("web")} className="text-sm text-muted-foreground hover:text-foreground transition">Web</button>
+            <button onClick={() => navigateTo("contact")} className="text-sm text-muted-foreground hover:text-foreground transition">Contact</button>
           </nav>
+
+          <div className="flex items-center gap-3">
+            <a 
+              href="https://discord.gg/qsptvww8xX" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition"
+            >
+              <MessageSquare className="w-4 h-4" />
+              Discord
+            </a>
+          </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section 
-        className="relative py-32 md:py-44 px-4 overflow-hidden"
-        style={{
-          backgroundImage: `url(${heroBackground})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background"></div>
-        <div className="absolute inset-0 bg-cosmic-mesh"></div>
-        
-        {/* Floating particles */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-float opacity-60" style={{ animationDelay: "0s" }}></div>
-          <div className="absolute top-1/3 right-1/4 w-1 h-1 bg-secondary rounded-full animate-float opacity-80" style={{ animationDelay: "0.5s" }}></div>
-          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-accent rounded-full animate-float opacity-70" style={{ animationDelay: "1s" }}></div>
-          <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-primary rounded-full animate-float opacity-50" style={{ animationDelay: "1.5s" }}></div>
+      {/* Mobile Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border/50 md:hidden">
+        <div className="flex items-center justify-around py-3">
+          <button onClick={() => navigateTo("home")} className={`flex flex-col items-center gap-1 ${activeView === "home" ? "text-primary" : "text-muted-foreground"}`}>
+            <Server className="w-5 h-5" />
+            <span className="text-xs">Home</span>
+          </button>
+          <button onClick={() => navigateTo("minecraft")} className={`flex flex-col items-center gap-1 ${activeView === "minecraft" ? "text-primary" : "text-muted-foreground"}`}>
+            <Cpu className="w-5 h-5" />
+            <span className="text-xs">MC</span>
+          </button>
+          <button onClick={() => navigateTo("vps")} className={`flex flex-col items-center gap-1 ${activeView === "vps" ? "text-primary" : "text-muted-foreground"}`}>
+            <HardDrive className="w-5 h-5" />
+            <span className="text-xs">VPS</span>
+          </button>
+          <button onClick={() => navigateTo("bot")} className={`flex flex-col items-center gap-1 ${activeView === "bot" ? "text-primary" : "text-muted-foreground"}`}>
+            <Bot className="w-5 h-5" />
+            <span className="text-xs">Bot</span>
+          </button>
+          <button onClick={() => navigateTo("contact")} className={`flex flex-col items-center gap-1 ${activeView === "contact" ? "text-primary" : "text-muted-foreground"}`}>
+            <Mail className="w-5 h-5" />
+            <span className="text-xs">Contact</span>
+          </button>
         </div>
+      </nav>
 
-        <div className="container mx-auto text-center relative z-10 max-w-5xl">
-          <div className="inline-flex items-center gap-2 mb-8 px-6 py-3 border border-primary/50 rounded-full bg-primary/10 backdrop-blur-md animate-glow-pulse">
-            <Rocket className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-primary font-display text-sm tracking-[0.3em]">COSMIC BLAST 2026</span>
-            <Rocket className="w-4 h-4 text-primary animate-pulse" />
-          </div>
-          <h2 className="text-6xl md:text-8xl font-display font-black mb-6 text-cosmic-gradient leading-none tracking-tight">
-            WELCOME TO<br />
-            <span className="relative">
-              COSMIC CLOUD
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 blur-2xl -z-10"></div>
-            </span>
-          </h2>
-          <p className="text-xl md:text-2xl text-foreground/95 mb-4 max-w-3xl mx-auto leading-relaxed font-body font-semibold">
-            Premium Minecraft, VPS & Web Hosting Solutions
-          </p>
-          <p className="text-base md:text-lg text-muted-foreground mb-12 max-w-2xl mx-auto font-body">
-            Experience ultra-fast performance with enterprise-grade infrastructure, Layer 7 DDoS protection, and 99.9% uptime guarantee
-          </p>
-          <div className="flex gap-5 justify-center flex-wrap">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary cosmic-glow font-display tracking-widest px-10 py-6 text-base animate-glow-pulse"
-              onClick={() => document.getElementById('vps')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Server className="mr-2 h-5 w-5" />
-              EXPLORE VPS
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="border-secondary/60 text-secondary hover:bg-secondary/10 hover:border-secondary font-display tracking-widest px-10 py-6 text-base"
-              onClick={() => document.getElementById('minecraft')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              <Cpu className="mr-2 h-5 w-5" />
-              MINECRAFT HOSTING
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* VPS Section */}
-      <section id="vps" className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
-              <Server className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">KVM VPS Hosting</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              KVM VPS Plans
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              High-performance VPS hosting with ultra-fast NVMe storage and stable bandwidth. Perfect for Minecraft, bots, and web hosting!
-            </p>
-          </div>
-
-          <Tabs defaultValue="intel" className="max-w-6xl mx-auto">
-            <TabsList className="grid w-full grid-cols-2 mb-8 h-auto p-1">
-              <TabsTrigger value="intel" className="py-3 text-base font-semibold">
-                <Cpu className="w-4 h-4 mr-2" />
-                Intel Xeon
-              </TabsTrigger>
-              <TabsTrigger value="amd" className="py-3 text-base font-semibold">
-                <Cpu className="w-4 h-4 mr-2" />
-                AMD EPYC
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="intel" className="space-y-8 animate-fade-in">
-              <div className="grid md:grid-cols-3 gap-6">
-                {vpsIntelPlans.map((plan, index) => (
-                  <PricingCard
-                    key={plan.title}
-                    title={plan.title}
-                    specs={plan.specs}
-                    price={plan.price}
-                    currency="Rs."
-                    featured={index === 1}
-                    delay={index * 80}
-                  />
-                ))}
+      {/* Home View */}
+      {activeView === "home" && (
+        <div className="animate-fade-in">
+          {/* Hero Section */}
+          <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+            <div className="absolute inset-0 grid-bg"></div>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[100px]"></div>
+            
+            <div className="container mx-auto max-w-6xl relative">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/30 bg-accent/10 mb-6">
+                    <div className="status-dot"></div>
+                    <span className="text-sm text-accent font-medium">ENTERPRISE SYSTEMS OPERATIONAL</span>
+                  </div>
+                  
+                  <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    Infrastructure<br />
+                    <span className="text-gradient">Singularity.</span>
+                  </h1>
+                  
+                  <p className="text-lg text-muted-foreground mb-8 max-w-lg">
+                    Deploy enterprise-grade VPS, Minecraft servers, and bot hosting in seconds. 
+                    Powered by AMD EPYC™ & Intel® Xeon® with 99.9% uptime guarantee.
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-4 mb-10">
+                    <Button 
+                      size="lg" 
+                      className="bg-primary hover:bg-primary/90 glow-primary"
+                      onClick={() => navigateTo("vps")}
+                    >
+                      Deploy Now <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="border-border hover:bg-card"
+                      onClick={() => navigateTo("minecraft")}
+                    >
+                      Learn More
+                    </Button>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-6">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Shield className="w-4 h-4 text-primary" />
+                      DDoS Protected
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <HardDrive className="w-4 h-4 text-primary" />
+                      NVMe Storage
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Clock className="w-4 h-4 text-primary" />
+                      24/7 Support
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="relative hidden lg:block">
+                  <div className="w-full h-80 rounded-2xl glass border border-border/50 p-6 animate-float">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-3 h-3 rounded-full bg-destructive"></div>
+                      <div className="w-3 h-3 rounded-full bg-accent"></div>
+                      <div className="w-3 h-3 rounded-full bg-primary"></div>
+                    </div>
+                    <div className="font-mono text-sm text-muted-foreground space-y-2">
+                      <p><span className="text-primary">$</span> slayer deploy --type vps</p>
+                      <p className="text-accent">→ Provisioning Intel Xeon server...</p>
+                      <p className="text-accent">→ Allocating 8GB RAM...</p>
+                      <p className="text-accent">→ Configuring NVMe storage...</p>
+                      <p className="text-foreground">✓ Server deployed in 12s</p>
+                      <p className="text-muted-foreground">IP: 185.xxx.xxx.xxx</p>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+          </section>
 
-              <div className="mt-12 p-6 bg-card border border-border rounded-lg">
-                <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-                  <h4 className="text-xl font-bold text-primary">All VPS servers include:</h4>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/30 rounded-full">
-                    <span className="text-sm font-display font-bold text-accent tracking-wide">Powered by OVH Cloud</span>
-                  </div>
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-primary" />
-                    <span className="font-semibold">Layer 7 DDoS Protection</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-primary" />
-                    <span>Full Root Access</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Gauge className="w-5 h-5 text-primary" />
-                    <span>Deploy Within Minutes</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Server className="w-5 h-5 text-primary" />
-                    <span>IPv4 Dedicated</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-primary" />
-                    <span>99.9% Uptime Guarantee</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Lock className="w-5 h-5 text-primary" />
-                    <span>Enterprise-Grade Security</span>
-                  </div>
-                </div>
-                <p className="mt-6 text-sm text-muted-foreground">
-                  ⚠️ Notice: Please follow our Rules to keep your service active.
+          {/* Features Section */}
+          <section className="py-20 px-4">
+            <div className="container mx-auto max-w-6xl">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl font-bold mb-4">Advanced Features</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Everything you need for professional VPS hosting with enterprise-grade performance and reliability
                 </p>
               </div>
-            </TabsContent>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: Zap, title: "High Performance", features: ["Latest-gen CPUs + NVMe", "Consistent IOPS", "Auto-throttling guard"] },
+                  { icon: Gauge, title: "Low Latency", features: ["Tier-1 transit and peering", "Smart anycast routing", "99.9% network uptime SLA"] },
+                  { icon: Shield, title: "Advanced Security", features: ["Real-time threat analytics", "DDoS blackhole + filtering", "Encrypted backups"] },
+                  { icon: Server, title: "Full Control", features: ["Root access & one-click apps", "Granular firewall & rDNS", "API & CLI ready"] },
+                ].map((feature) => (
+                  <div key={feature.title} className="glass rounded-2xl p-6 card-hover">
+                    <div className="feature-icon mb-4">
+                      <feature.icon className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
+                    <ul className="space-y-2">
+                      {feature.features.map((f) => (
+                        <li key={f} className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Check className="w-4 h-4 text-accent" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-            <TabsContent value="amd" className="space-y-8 animate-fade-in">
-              <div className="flex flex-col items-center justify-center py-20">
-                <div className="text-center">
-                  <Rocket className="w-16 h-16 text-secondary mx-auto mb-4 animate-pulse" />
-                  <h3 className="text-3xl font-bold mb-4 text-cosmic-gradient">Coming Soon!</h3>
-                  <p className="text-lg text-muted-foreground max-w-md">
-                    AMD EPYC VPS plans are launching soon! Stay tuned for next-gen performance.
+          {/* Services Section */}
+          <section className="py-20 px-4 bg-card/30">
+            <div className="container mx-auto max-w-6xl">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl font-bold mb-4">Enterprise Hosting Solutions</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto">
+                  Choose from our portfolio of professional hosting services
+                </p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  { icon: Cpu, title: "Minecraft Hosting", desc: "AMD EPYC™ Powered", action: () => navigateTo("minecraft") },
+                  { icon: Server, title: "Cloud VPS", desc: "AMD & Intel Compute", action: () => navigateTo("vps") },
+                  { icon: Bot, title: "Bot Hosting", desc: "Node.js, Python", action: () => navigateTo("bot") },
+                  { icon: Globe, title: "Web Hosting", desc: "cPanel, LiteSpeed", action: () => navigateTo("web") },
+                ].map((service) => (
+                  <button 
+                    key={service.title} 
+                    onClick={service.action}
+                    className="glass rounded-2xl p-6 text-left card-hover group"
+                  >
+                    <service.icon className="w-10 h-10 text-primary mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{service.desc}</p>
+                    <span className="text-sm text-primary group-hover:underline flex items-center gap-1">
+                      View Plans <ChevronRight className="w-4 h-4" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Stats Section */}
+          <section className="py-16 px-4">
+            <div className="container mx-auto max-w-4xl">
+              <div className="glass rounded-2xl p-8">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                  {[
+                    { value: "99.9%", label: "Uptime SLA", icon: Activity },
+                    { value: "24/7", label: "Support", icon: Clock },
+                    { value: "10ms", label: "Avg Latency", icon: Timer },
+                    { value: "∞", label: "Scalability", icon: Infinity },
+                  ].map((stat) => (
+                    <div key={stat.label}>
+                      <stat.icon className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <div className="text-3xl font-bold text-gradient">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* About Section */}
+          <section className="py-20 px-4 bg-card/30">
+            <div className="container mx-auto max-w-6xl">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl font-bold mb-4">Leadership & Vision</h2>
+                <p className="text-muted-foreground">Founded in 2025. Quality over Greed. Professionalism over everything.</p>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="glass rounded-2xl p-8">
+                  <h3 className="text-xl font-semibold mb-4">Our Mission</h3>
+                  <p className="text-muted-foreground mb-6">
+                    To democratize enterprise-grade infrastructure, making professional hosting accessible to developers, 
+                    gamers, and businesses of all sizes. We believe in transparent pricing, exceptional performance, 
+                    and unwavering reliability.
+                  </p>
+                  <ul className="space-y-3">
+                    {["Enterprise hardware at accessible prices", "No hidden fees, transparent billing", "Community-driven development"].map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-sm">
+                        <Check className="w-4 h-4 text-accent" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="glass rounded-2xl p-8 text-center">
+                  <div className="w-20 h-20 rounded-full bg-primary/20 mx-auto mb-4 flex items-center justify-center">
+                    <Users className="w-10 h-10 text-primary" />
+                  </div>
+                  <span className="pro-badge mb-4 inline-block">Founder</span>
+                  <h3 className="text-xl font-semibold mb-2">Shadow Slayer</h3>
+                  <p className="text-sm text-muted-foreground mb-4">Founder & CEO</p>
+                  <p className="text-sm text-muted-foreground">
+                    With a vision to revolutionize cloud infrastructure, Shadow Slayer founded Slayer Nodes to 
+                    provide enterprise-grade hosting solutions without enterprise-grade complexity or pricing.
                   </p>
                 </div>
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
-      {/* Minecraft Section */}
-      <section id="minecraft" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 border border-secondary/20 rounded-full mb-4">
-              <Cpu className="w-4 h-4 text-secondary" />
-              <span className="text-sm font-semibold text-secondary uppercase tracking-wider">Minecraft Hosting</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              Minecraft Server Plans
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Optimized game servers with instant deployment, automated backups, and dedicated support 🎮
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 max-w-7xl mx-auto">
-            {minecraftPlans.map((plan, index) => (
-              <PricingCard
-                key={plan.title}
-                title={plan.title}
-                specs={plan.specs}
-                price={plan.price}
-                currency="PKR"
-                featured={index === 2}
-                delay={index * 80}
-              />
-            ))}
-          </div>
+          </section>
         </div>
-      </section>
+      )}
 
-      {/* Website Hosting Section */}
-      <section id="website" className="py-20 px-4 bg-background">
-        <div className="container mx-auto">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
-              <Globe className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Web Hosting</span>
+      {/* Minecraft View */}
+      {activeView === "minecraft" && (
+        <div className="pt-24 pb-20 px-4 animate-fade-in">
+          <div className="container mx-auto max-w-6xl">
+            <button onClick={() => navigateTo("home")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition">
+              <ArrowLeft className="w-4 h-4" /> Return
+            </button>
+            
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">Minecraft Hosting Collection</h1>
+              <p className="text-muted-foreground">Enterprise-grade Minecraft server hosting with AMD EPYC™ processors</p>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              Website Hosting Plans
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Professional web hosting with WordPress support, free domains, and enterprise security 🌐
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {websitePlans.map((plan, index) => (
-              <PricingCard
-                key={plan.title}
-                title={plan.title}
-                specs={plan.specs}
-                price={plan.price}
-                currency="PKR"
-                featured={index === 1}
-                delay={index * 80}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Domain Plans Section */}
-      <section id="domains" className="py-20 px-4 bg-muted/20 relative overflow-hidden">
-        <div className="absolute inset-0 diagonal-lines opacity-5"></div>
-        <div className="container mx-auto relative">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent/10 border border-accent/30 rounded-full mb-4">
-              <Globe className="w-4 h-4 text-accent" />
-              <span className="text-sm font-display font-semibold text-accent uppercase tracking-widest">DOMAIN REGISTRATION</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-cosmic-gradient leading-tight tracking-tight">
-              DOMAIN PLANS
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed font-body">
-              Secure your perfect domain with Cosmic Cloud protection
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {domainPlans.map((domain, index) => (
-              <div 
-                key={domain.extension}
-                className={`relative p-8 rounded-lg transition-all duration-300 card-glow ${
-                  domain.popular 
-                    ? 'bg-gradient-to-b from-primary/20 to-card border-2 border-primary cosmic-glow' 
-                    : 'bg-card border border-border hover:border-primary/50'
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {domain.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-display font-bold tracking-wider">
-                      POPULAR
-                    </span>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+              {minecraftPlans.map((plan) => (
+                <div 
+                  key={plan.name} 
+                  className={`glass rounded-2xl p-6 card-hover ${plan.featured ? "glow-diamond border-secondary/40" : ""}`}
+                >
+                  {plan.featured && <span className="pro-badge mb-4 inline-block">POPULAR</span>}
+                  <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+                  <div className="space-y-2 mb-6 text-sm">
+                    <div className="flex justify-between"><span className="text-muted-foreground">RAM</span><span>{plan.ram}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Disk</span><span>{plan.disk}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Cores</span><span>{plan.cores}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">CPU</span><span>{plan.cpu}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Backups</span><span>{plan.backups}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Ports</span><span>{plan.ports}</span></div>
                   </div>
-                )}
-                <div className="text-center">
-                  <h3 className="text-4xl font-display font-bold text-cosmic-gradient mb-2">{domain.extension}</h3>
-                  <div className="flex items-baseline justify-center gap-1 mb-4">
-                    <span className="text-3xl font-display font-bold text-foreground">{domain.price}</span>
-                    <span className="text-muted-foreground font-body">PKR/year</span>
-                  </div>
-                  <p className="text-muted-foreground font-body mb-6">{domain.description}</p>
-                  <div className="flex items-center justify-center gap-2 text-sm text-primary mb-6">
-                    <Lock className="w-4 h-4" />
-                    <span className="font-body">Free SSL Certificate Included</span>
-                  </div>
+                  <div className="text-2xl font-bold mb-4">₹{plan.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
                   <Button 
-                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display tracking-wider"
-                    onClick={() => window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank")}
+                    className="w-full" 
+                    variant={plan.featured ? "default" : "outline"}
+                    onClick={() => window.open("https://discord.gg/qsptvww8xX", "_blank")}
                   >
-                    REGISTER NOW
+                    Order Now
                   </Button>
                 </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* VPS View */}
+      {activeView === "vps" && (
+        <div className="pt-24 pb-20 px-4 animate-fade-in">
+          <div className="container mx-auto max-w-6xl">
+            <button onClick={() => navigateTo("home")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition">
+              <ArrowLeft className="w-4 h-4" /> Return
+            </button>
+            
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">Enterprise Cloud Infrastructure</h1>
+              <p className="text-muted-foreground mb-6">Choose between AMD EPYC™ or Intel® Xeon® processors for your VPS</p>
+              
+              <Tabs defaultValue="intel" className="max-w-4xl mx-auto">
+                <TabsList className="mb-8">
+                  <TabsTrigger value="intel" className="px-6">INTEL® XEON®</TabsTrigger>
+                  <TabsTrigger value="amd" className="px-6">AMD EPYC™</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="intel">
+                  <div className="grid md:grid-cols-3 gap-6">
+                    {vpsIntelPlans.map((plan) => (
+                      <div 
+                        key={plan.name} 
+                        className={`glass rounded-2xl p-6 card-hover ${plan.featured ? "glow-diamond border-secondary/40" : ""}`}
+                      >
+                        {plan.featured && <span className="pro-badge mb-4 inline-block">RECOMMENDED</span>}
+                        <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+                        <div className="space-y-2 mb-6 text-sm">
+                          <div className="flex justify-between"><span className="text-muted-foreground">RAM</span><span>{plan.ram}</span></div>
+                          <div className="flex justify-between"><span className="text-muted-foreground">CPU</span><span>{plan.cpu}</span></div>
+                          <div className="flex justify-between"><span className="text-muted-foreground">Storage</span><span>{plan.storage}</span></div>
+                          <div className="flex justify-between"><span className="text-muted-foreground">Bandwidth</span><span>{plan.bandwidth}</span></div>
+                        </div>
+                        <div className="text-2xl font-bold mb-4">₹{plan.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+                        <Button 
+                          className="w-full" 
+                          variant={plan.featured ? "default" : "outline"}
+                          onClick={() => window.open("https://discord.gg/qsptvww8xX", "_blank")}
+                        >
+                          Configure
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="amd">
+                  <div className="text-center py-16">
+                    <Rocket className="w-16 h-16 text-primary mx-auto mb-4 animate-pulse-slow" />
+                    <h3 className="text-2xl font-bold mb-2">Coming Soon!</h3>
+                    <p className="text-muted-foreground">AMD EPYC VPS plans are launching soon!</p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bot Hosting View */}
+      {activeView === "bot" && (
+        <div className="pt-24 pb-20 px-4 animate-fade-in">
+          <div className="container mx-auto max-w-4xl">
+            <button onClick={() => navigateTo("home")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition">
+              <ArrowLeft className="w-4 h-4" /> Return
+            </button>
+            
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">Bot Hosting Solutions</h1>
+              <p className="text-muted-foreground">Reliable Discord bot hosting with Node.js and Python support</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {botPlans.map((plan) => (
+                <div 
+                  key={plan.name} 
+                  className={`glass rounded-2xl p-6 card-hover ${plan.featured ? "glow-diamond border-secondary/40" : ""}`}
+                >
+                  {plan.featured && <span className="pro-badge mb-4 inline-block">POPULAR</span>}
+                  <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+                  <div className="space-y-2 mb-6 text-sm">
+                    <div className="flex justify-between"><span className="text-muted-foreground">RAM</span><span>{plan.ram}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">CPU</span><span>{plan.cpu}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Disk</span><span>{plan.disk}</span></div>
+                  </div>
+                  <div className="text-2xl font-bold mb-4">₹{plan.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+                  <Button 
+                    className="w-full" 
+                    variant={plan.featured ? "default" : "outline"}
+                    onClick={() => window.open("https://discord.gg/qsptvww8xX", "_blank")}
+                  >
+                    Order Now
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Web Hosting View */}
+      {activeView === "web" && (
+        <div className="pt-24 pb-20 px-4 animate-fade-in">
+          <div className="container mx-auto max-w-4xl">
+            <button onClick={() => navigateTo("home")} className="flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition">
+              <ArrowLeft className="w-4 h-4" /> Return
+            </button>
+            
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">Web Hosting Services</h1>
+              <p className="text-muted-foreground">Managed web hosting with cPanel and LiteSpeed optimization</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {webPlans.map((plan) => (
+                <div 
+                  key={plan.name} 
+                  className={`glass rounded-2xl p-6 card-hover ${plan.featured ? "glow-diamond border-secondary/40" : ""}`}
+                >
+                  {plan.featured && <span className="pro-badge mb-4 inline-block">BEST VALUE</span>}
+                  <h3 className="text-xl font-bold mb-4">{plan.name}</h3>
+                  <div className="space-y-2 mb-6 text-sm">
+                    <div className="flex justify-between"><span className="text-muted-foreground">Sites</span><span>{plan.sites}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Storage</span><span>{plan.disk}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">SSL</span><span>{plan.ssl}</span></div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">Backup</span><span>{plan.backup}</span></div>
+                  </div>
+                  <div className="text-2xl font-bold mb-4">₹{plan.price}<span className="text-sm text-muted-foreground font-normal">/mo</span></div>
+                  <Button 
+                    className="w-full" 
+                    variant={plan.featured ? "default" : "outline"}
+                    onClick={() => window.open("https://discord.gg/qsptvww8xX", "_blank")}
+                  >
+                    Get Started
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contact View */}
+      {activeView === "contact" && (
+        <div className="pt-24 pb-20 px-4 animate-fade-in">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold mb-4">Enterprise Support</h1>
+              <p className="text-muted-foreground">24/7 professional support for all hosting services</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6 mb-12">
+              <a 
+                href="https://discord.gg/qsptvww8xX" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="glass rounded-2xl p-8 card-hover block"
+              >
+                <MessageSquare className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Discord Community</h3>
+                <p className="text-muted-foreground mb-2">Join for ticket support & community assistance</p>
+                <p className="text-sm text-accent">Average response time: 5 minutes</p>
+              </a>
+              
+              <a 
+                href="mailto:ashad.umar355@gmail.com"
+                className="glass rounded-2xl p-8 card-hover block"
+              >
+                <Mail className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Email Support</h3>
+                <p className="text-muted-foreground mb-2">ashad.umar355@gmail.com</p>
+                <p className="text-sm text-accent">Business inquiries & partnerships</p>
+              </a>
+            </div>
+            
+            <div className="glass rounded-2xl p-8 text-center">
+              <h3 className="text-xl font-semibold mb-4">Service Level Agreement</h3>
+              <p className="text-muted-foreground mb-6">
+                We guarantee 99.9% uptime, 24/7 monitoring, and professional support for all enterprise plans.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                {["Enterprise-grade infrastructure", "Professional support team", "SLA-backed guarantees"].map((item) => (
+                  <span key={item} className="flex items-center gap-2 text-sm">
+                    <Check className="w-4 h-4 text-accent" />
+                    {item}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="mt-10 p-6 bg-card/50 border border-accent/30 rounded-lg max-w-3xl mx-auto text-center backdrop-blur-sm">
-            <div className="flex items-center justify-center gap-2 text-accent font-display font-semibold">
-              <Shield className="w-5 h-5" />
-              <span>All Domains Are In Secure Protection From Cosmic Cloud</span>
             </div>
           </div>
         </div>
-      </section>
+      )}
 
-      {/* Discord Boost Section */}
-      <section id="boost" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
-          <div className="text-center mb-12 max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 border border-secondary/20 rounded-full mb-4">
-              <Rocket className="w-4 h-4 text-secondary" />
-              <span className="text-sm font-semibold text-secondary uppercase tracking-wider">Discord Boost Plans</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              Boost Plans
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              🚀 Boost = Permanent Server! Power up Cosmic Cloud with boosts & enjoy premium hosting
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {boostPlans.map((plan, index) => (
-              <PricingCard
-                key={plan.title}
-                title={plan.title}
-                specs={plan.specs}
-                price={plan.price}
-                currency=""
-                featured={index === 1}
-                delay={index * 80}
-              />
-            ))}
-          </div>
-
-          <div className="mt-8 p-6 bg-card border border-border rounded-lg max-w-4xl mx-auto text-center">
-            <p className="text-foreground mb-2">📌 All servers stay permanent while boosted</p>
-            <p className="text-destructive font-semibold">⚠️ Remove your boost = server gone</p>
-            <p className="text-muted-foreground text-sm mt-4">* Lifetime hosting as long as boost is active</p>
-          </div>
-
-          <div className="mt-8 p-4 bg-destructive/10 border border-destructive/30 rounded-lg max-w-4xl mx-auto text-center">
-            <p className="text-destructive font-semibold">❌ Free Plan Not Available</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-4">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full mb-4">
-              <MessageSquare className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Contact Us</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-cosmic-gradient leading-tight">
-              Get in Touch
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Need assistance? Our support team is ready to help you 24/7
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <a
-              href="mailto:ashad.umar355@gmail.com"
-              className="p-8 bg-card border border-border rounded-lg hover:border-primary transition-all cosmic-glow-hover"
-            >
-              <Mail className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-bold mb-2">Email Us</h3>
-              <p className="text-muted-foreground mb-2">ashad.umar355@gmail.com</p>
-              <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
-            </a>
-
-            <a
-              href="https://discord.gg/qsptvww8xX"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-8 bg-card border border-border rounded-lg hover:border-primary transition-all cosmic-glow-hover"
-            >
-              <MessageSquare className="w-12 h-12 text-primary mb-4" />
-              <h3 className="text-xl font-bold mb-2">Join Our Discord</h3>
-              <p className="text-muted-foreground mb-2">Connect with our community</p>
-              <p className="text-sm text-muted-foreground">Get instant support and updates</p>
-            </a>
-          </div>
-
-          <div className="text-center p-6 bg-card border border-border rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              Founded by <span className="text-primary font-semibold">Shadow Slayer</span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
       <Footer />
     </div>
   );
