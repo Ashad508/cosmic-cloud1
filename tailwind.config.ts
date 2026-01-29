@@ -57,15 +57,17 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        cosmic: {
-          glow: "hsl(var(--cosmic-glow))",
-          "glow-secondary": "hsl(var(--cosmic-glow-secondary))",
-          gold: "hsl(var(--cosmic-gold))",
+        brand: {
+          primary: "hsl(var(--brand-primary))",
+          accent: "hsl(var(--brand-accent))",
+          epyc: "hsl(var(--brand-epyc))",
+          intel: "hsl(var(--brand-intel))",
+          success: "hsl(var(--brand-success))",
         },
       },
       fontFamily: {
-        display: ['Orbitron', 'sans-serif'],
-        body: ['Rajdhani', 'sans-serif'],
+        sans: ['Outfit', 'sans-serif'],
+        mono: ['Space Grotesk', 'monospace'],
       },
       borderRadius: {
         lg: "var(--radius)",
