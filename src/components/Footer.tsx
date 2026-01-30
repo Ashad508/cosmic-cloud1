@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+
+const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed max-w-md text-sm">
-              Enterprise-grade VPS, Minecraft, Bot, and Web hosting with DDoS protection, 99.9% uptime guarantee, 
+              Enterprise-grade VPS, Minecraft, Domain, and Web hosting with DDoS protection, 99.9% uptime guarantee, 
               and 24/7 support. Powered by AMD EPYC™ & Intel® Xeon®.
             </p>
           </div>
@@ -36,12 +38,12 @@ const Footer = () => {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => navigate('/about')}
+                <Link 
+                  to="/status-checker"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  About Us
-                </button>
+                  Trial Status Checker
+                </Link>
               </li>
               <li>
                 <button 
@@ -53,7 +55,7 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://discord.gg/qsptvww8xX"
+                  href={DISCORD_SERVER}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors"
@@ -84,6 +86,14 @@ const Footer = () => {
                   Terms of Service
                 </button>
               </li>
+              <li>
+                <Link 
+                  to="/admin-login"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Admin
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -91,8 +101,8 @@ const Footer = () => {
         {/* SEO Keywords */}
         <div className="py-4 border-t border-border mb-4">
           <p className="text-xs text-muted-foreground text-center">
-            Slayer Nodes • Enterprise Hosting • VPS Hosting • Minecraft Hosting • Bot Hosting • 
-            Cloud Server Hosting • Game Server Hosting • Discord Bot Hosting • Web Hosting • Professional Hosting
+            Slayer Nodes • Enterprise Hosting • VPS Hosting • Minecraft Hosting • Domain Registration • 
+            Cloud Server Hosting • Game Server Hosting • Web Hosting • Professional Hosting • India 🇮🇳
           </p>
         </div>
 

@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      asn_entries: {
+        Row: {
+          asn_number: string
+          created_at: string
+          id: string
+          status: string
+          updated_at: string
+          user_name: string
+        }
+        Insert: {
+          asn_number: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_name: string
+        }
+        Update: {
+          asn_number?: string
+          created_at?: string
+          id?: string
+          status?: string
+          updated_at?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: string
