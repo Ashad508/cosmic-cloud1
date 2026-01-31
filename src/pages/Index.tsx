@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
@@ -90,8 +91,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Announcement Banner */}
+      <AnnouncementBanner />
+      
       {/* Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
+      <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50 announcement-offset">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigateTo("home")}>
             <img src={cosmicLogo} alt="Slayer Nodes" className="w-10 h-10 rounded-lg" />
