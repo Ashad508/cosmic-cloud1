@@ -10,8 +10,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { 
   Shield, Plus, Trash2, LogOut, ArrowLeft, Loader2, 
   RefreshCw, CheckCircle, Clock, XCircle, Edit2, Save, X,
-  Megaphone, MessageSquare
+  Megaphone, MessageSquare, AlertTriangle, Power
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 
@@ -53,6 +64,10 @@ const AdminPanel = () => {
   // New announcement
   const [newAnnouncement, setNewAnnouncement] = useState("");
   const [addingAnnouncement, setAddingAnnouncement] = useState(false);
+
+  // Maintenance mode
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [togglingMaintenance, setTogglingMaintenance] = useState(false);
   
   const navigate = useNavigate();
 
@@ -60,6 +75,7 @@ const AdminPanel = () => {
     checkAuth();
     fetchEntries();
     fetchAnnouncements();
+    fetchMaintenanceMode();
     
     // Set up realtime subscription
     const channel = supabase
@@ -69,6 +85,9 @@ const AdminPanel = () => {
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "announcements" }, () => {
         fetchAnnouncements();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => {
+        fetchMaintenanceMode();
       })
       .subscribe();
 
@@ -271,6 +290,43 @@ const AdminPanel = () => {
     navigate("/admin-login");
   };
 
+  const fetchMaintenanceMode = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("site_settings")
+        .select("value")
+        .eq("key", "maintenance_mode")
+        .maybeSingle();
+
+      if (error) throw error;
+      const value = data?.value as { enabled?: boolean } | null;
+      setMaintenanceMode(value?.enabled || false);
+    } catch (error) {
+      console.error("Error fetching maintenance mode:", error);
+    }
+  };
+
+  const toggleMaintenanceMode = async () => {
+    setTogglingMaintenance(true);
+    try {
+      const newValue = !maintenanceMode;
+      const { error } = await supabase
+        .from("site_settings")
+        .update({ value: { enabled: newValue } })
+        .eq("key", "maintenance_mode");
+
+      if (error) throw error;
+
+      setMaintenanceMode(newValue);
+      toast.success(`Maintenance mode ${newValue ? "enabled" : "disabled"}`);
+    } catch (error) {
+      console.error("Error toggling maintenance mode:", error);
+      toast.error("Failed to toggle maintenance mode");
+    } finally {
+      setTogglingMaintenance(false);
+    }
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
       case "approved":
@@ -332,7 +388,7 @@ const AdminPanel = () => {
       <main className="pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <Tabs defaultValue="asn" className="w-full">
-            <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+            <TabsList className="grid w-full max-w-lg grid-cols-3 mb-8">
               <TabsTrigger value="asn" className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 ASN Entries
@@ -340,6 +396,10 @@ const AdminPanel = () => {
               <TabsTrigger value="announcements" className="flex items-center gap-2">
                 <Megaphone className="w-4 h-4" />
                 Announcements
+              </TabsTrigger>
+              <TabsTrigger value="maintenance" className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                Maintenance
               </TabsTrigger>
             </TabsList>
 
@@ -655,6 +715,105 @@ const AdminPanel = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            </TabsContent>
+
+            {/* Maintenance Mode Tab */}
+            <TabsContent value="maintenance">
+              <div className="glass rounded-2xl p-6">
+                <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-destructive" />
+                  Site Maintenance Mode
+                </h2>
+
+                {/* Current Status */}
+                <div className={`rounded-xl p-6 mb-8 border-2 ${maintenanceMode ? "border-destructive/50 bg-destructive/10" : "border-primary/30 bg-primary/5"}`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={`w-3 h-3 rounded-full ${maintenanceMode ? "bg-destructive animate-pulse" : "bg-primary"}`}></div>
+                        <span className="font-semibold text-lg">
+                          {maintenanceMode ? "Maintenance Mode ACTIVE" : "Site is LIVE"}
+                        </span>
+                      </div>
+                      <p className="text-muted-foreground">
+                        {maintenanceMode 
+                          ? "The website is currently showing a maintenance page to all visitors."
+                          : "The website is operating normally and accessible to all visitors."
+                        }
+                      </p>
+                    </div>
+                    <Power className={`w-12 h-12 ${maintenanceMode ? "text-destructive" : "text-primary"}`} />
+                  </div>
+                </div>
+
+                {/* Warning Box */}
+                <div className="glass rounded-xl p-6 mb-8 border border-accent/30 bg-accent/5">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-6 h-6 text-accent flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h3 className="font-semibold text-accent mb-2">⚠️ Important Warning</h3>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        <li>• When maintenance mode is ON, all visitors will see a maintenance page instead of the website.</li>
+                        <li>• The admin panel will remain accessible to manage settings.</li>
+                        <li>• Users will be directed to your Discord server for updates.</li>
+                        <li>• Maintenance mode will stay ON until you manually turn it OFF.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Toggle Button */}
+                <div className="flex justify-center">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        size="lg"
+                        variant={maintenanceMode ? "default" : "destructive"}
+                        className={`min-w-64 ${maintenanceMode ? "bg-primary hover:bg-primary/90" : "bg-destructive hover:bg-destructive/90"}`}
+                        disabled={togglingMaintenance}
+                      >
+                        {togglingMaintenance ? (
+                          <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                        ) : (
+                          <Power className="w-5 h-5 mr-2" />
+                        )}
+                        {maintenanceMode ? "Disable Maintenance Mode" : "Enable Maintenance Mode"}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="glass border-border">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="flex items-center gap-2">
+                          <AlertTriangle className={maintenanceMode ? "text-primary" : "text-destructive"} />
+                          {maintenanceMode ? "Disable Maintenance Mode?" : "Enable Maintenance Mode?"}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {maintenanceMode 
+                            ? "The website will become accessible to all visitors again. All normal functionality will be restored."
+                            : "This will make the entire website inaccessible to visitors. They will see a maintenance page with a link to your Discord server. Only the admin panel will remain accessible."
+                          }
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="border-border">Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={toggleMaintenanceMode}
+                          className={maintenanceMode ? "bg-primary hover:bg-primary/90" : "bg-destructive hover:bg-destructive/90"}
+                        >
+                          {maintenanceMode ? "Yes, Go Live" : "Yes, Enable Maintenance"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+
+                {/* Info */}
+                <p className="text-center text-sm text-muted-foreground mt-6">
+                  {maintenanceMode 
+                    ? "Click the button above and confirm to bring the site back online."
+                    : "Click the button above and confirm to put the site into maintenance mode."
+                  }
+                </p>
               </div>
             </TabsContent>
           </Tabs>

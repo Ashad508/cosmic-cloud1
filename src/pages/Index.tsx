@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, 
@@ -8,6 +8,8 @@ import {
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
+import MaintenancePage from "@/components/MaintenancePage";
+import { supabase } from "@/integrations/supabase/client";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
@@ -83,11 +85,66 @@ type ViewType = "home" | "minecraft" | "vps" | "domain" | "web" | "contact";
 
 const Index = () => {
   const [activeView, setActiveView] = useState<ViewType>("home");
+  const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
+  const [loadingMaintenance, setLoadingMaintenance] = useState(true);
+
+  useEffect(() => {
+    const fetchMaintenanceMode = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("site_settings")
+          .select("value")
+          .eq("key", "maintenance_mode")
+          .maybeSingle();
+
+        const value = data?.value as { enabled?: boolean } | null;
+        if (!error && value?.enabled) {
+          setIsMaintenanceMode(true);
+        }
+      } catch (error) {
+        console.error("Error fetching maintenance mode:", error);
+      } finally {
+        setLoadingMaintenance(false);
+      }
+    };
+
+    fetchMaintenanceMode();
+
+    // Subscribe to realtime changes
+    const channel = supabase
+      .channel("maintenance_mode")
+      .on("postgres_changes", { 
+        event: "*", 
+        schema: "public", 
+        table: "site_settings",
+      filter: "key=eq.maintenance_mode"
+      }, (payload: { new?: { value?: { enabled?: boolean } } }) => {
+        setIsMaintenanceMode(payload.new?.value?.enabled || false);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const navigateTo = (view: ViewType) => {
     setActiveView(view);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Show loading briefly, then maintenance page if enabled
+  if (loadingMaintenance) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (isMaintenanceMode) {
+    return <MaintenancePage />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
