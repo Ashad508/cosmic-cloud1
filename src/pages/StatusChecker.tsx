@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, CheckCircle, XCircle, Clock, ArrowLeft, Loader2 } from "lucide-react";
+import { Search, CheckCircle, XCircle, Clock, ArrowLeft, Loader2, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
@@ -12,6 +12,7 @@ interface AsnEntry {
   asn_number: string;
   user_name: string;
   status: string;
+  comments: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -195,6 +196,18 @@ const StatusChecker = () => {
                         {result.status.toUpperCase()}
                       </div>
                     </div>
+                    
+                    {result.comments && (
+                      <div className="glass rounded-xl p-4 text-left border border-primary/20">
+                        <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
+                          <MessageSquare className="w-4 h-4 text-primary" />
+                          Admin Comments
+                        </div>
+                        <div className="text-sm bg-card/50 rounded-lg p-3 whitespace-pre-wrap">
+                          {result.comments}
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="glass rounded-xl p-4">
                       <div className="text-sm text-muted-foreground mb-1">Last Updated</div>

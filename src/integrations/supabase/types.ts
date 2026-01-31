@@ -14,9 +14,34 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          message: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          message: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          message?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       asn_entries: {
         Row: {
           asn_number: string
+          comments: string | null
           created_at: string
           id: string
           status: string
@@ -25,6 +50,7 @@ export type Database = {
         }
         Insert: {
           asn_number: string
+          comments?: string | null
           created_at?: string
           id?: string
           status?: string
@@ -33,6 +59,7 @@ export type Database = {
         }
         Update: {
           asn_number?: string
+          comments?: string | null
           created_at?: string
           id?: string
           status?: string
