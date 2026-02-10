@@ -68,6 +68,42 @@ export type Database = {
         }
         Relationships: []
       }
+      order_entries: {
+        Row: {
+          comments: string | null
+          created_at: string
+          expected_time: string | null
+          id: string
+          service_name: string
+          status: string
+          syn_number: string
+          updated_at: string
+          user_name: string
+        }
+        Insert: {
+          comments?: string | null
+          created_at?: string
+          expected_time?: string | null
+          id?: string
+          service_name?: string
+          status?: string
+          syn_number: string
+          updated_at?: string
+          user_name: string
+        }
+        Update: {
+          comments?: string | null
+          created_at?: string
+          expected_time?: string | null
+          id?: string
+          service_name?: string
+          status?: string
+          syn_number?: string
+          updated_at?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: string

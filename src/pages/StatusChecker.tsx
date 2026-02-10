@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, CheckCircle, XCircle, Clock, ArrowLeft, Loader2, MessageSquare } from "lucide-react";
+import { Search, CheckCircle, XCircle, Clock, ArrowLeft, MessageSquare, Database, Server, Wifi, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
@@ -17,6 +18,14 @@ interface AsnEntry {
   updated_at: string;
 }
 
+const LOADING_STEPS = [
+  { label: "Initializing secure connection...", icon: Wifi, duration: 600 },
+  { label: "Reaching Slayer Nodes database...", icon: Server, duration: 800 },
+  { label: "Fetching trial records...", icon: Database, duration: 700 },
+  { label: "Verifying data integrity...", icon: ShieldCheck, duration: 500 },
+  { label: "Results fetched successfully", icon: CheckCircle, duration: 400 },
+];
+
 const StatusChecker = () => {
   const [asnNumber, setAsnNumber] = useState("");
   const [userName, setUserName] = useState("");
@@ -24,6 +33,8 @@ const StatusChecker = () => {
   const [result, setResult] = useState<AsnEntry | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(0);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   const checkStatus = async () => {
     if (!asnNumber.trim() || !userName.trim()) return;
@@ -32,6 +43,15 @@ const StatusChecker = () => {
     setNotFound(false);
     setResult(null);
     setSearched(true);
+    setLoadingStep(0);
+    setLoadingProgress(0);
+
+    // Animated loading sequence
+    for (let i = 0; i < LOADING_STEPS.length - 1; i++) {
+      setLoadingStep(i);
+      setLoadingProgress(((i + 1) / LOADING_STEPS.length) * 100);
+      await new Promise((r) => setTimeout(r, LOADING_STEPS[i].duration));
+    }
 
     try {
       const { data, error } = await supabase
@@ -42,6 +62,10 @@ const StatusChecker = () => {
         .maybeSingle();
 
       if (error) throw error;
+
+      setLoadingStep(LOADING_STEPS.length - 1);
+      setLoadingProgress(100);
+      await new Promise((r) => setTimeout(r, 400));
 
       if (data) {
         setResult(data);
@@ -90,7 +114,6 @@ const StatusChecker = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
@@ -100,7 +123,6 @@ const StatusChecker = () => {
               <span className="text-xs text-muted-foreground">Trial Status Checker</span>
             </div>
           </Link>
-
           <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
@@ -123,9 +145,7 @@ const StatusChecker = () => {
           <div className="glass rounded-2xl p-8 mb-8">
             <div className="space-y-6">
               <div>
-                <Label htmlFor="asnNumber" className="text-sm font-medium mb-2 block">
-                  ASN Number
-                </Label>
+                <Label htmlFor="asnNumber" className="text-sm font-medium mb-2 block">ASN Number</Label>
                 <Input
                   id="asnNumber"
                   placeholder="Enter your ASN number"
@@ -134,11 +154,8 @@ const StatusChecker = () => {
                   className="bg-background/50"
                 />
               </div>
-
               <div>
-                <Label htmlFor="userName" className="text-sm font-medium mb-2 block">
-                  User Name
-                </Label>
+                <Label htmlFor="userName" className="text-sm font-medium mb-2 block">User Name</Label>
                 <Input
                   id="userName"
                   placeholder="Enter your username"
@@ -147,30 +164,49 @@ const StatusChecker = () => {
                   className="bg-background/50"
                 />
               </div>
-
               <Button 
                 onClick={checkStatus} 
                 className="w-full" 
                 size="lg"
                 disabled={loading || !asnNumber.trim() || !userName.trim()}
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Checking...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-4 h-4 mr-2" />
-                    Check Status
-                  </>
-                )}
+                <Search className="w-4 h-4 mr-2" />
+                Check Status
               </Button>
             </div>
           </div>
 
+          {/* Loading Animation */}
+          {loading && (
+            <div className="glass rounded-2xl p-8 mb-8 animate-fade-in">
+              <div className="space-y-4">
+                {LOADING_STEPS.map((step, i) => {
+                  const StepIcon = step.icon;
+                  const isActive = i === loadingStep;
+                  const isDone = i < loadingStep;
+                  return (
+                    <div
+                      key={i}
+                      className={`flex items-center gap-3 transition-all duration-300 ${
+                        isDone ? "opacity-50" : isActive ? "opacity-100" : "opacity-20"
+                      }`}
+                    >
+                      <StepIcon className={`w-5 h-5 flex-shrink-0 ${isDone ? "text-primary" : isActive ? "text-accent animate-pulse" : "text-muted-foreground"}`} />
+                      <span className={`text-sm ${isActive ? "text-foreground font-medium" : "text-muted-foreground"}`}>
+                        {step.label}
+                      </span>
+                      {isDone && <CheckCircle className="w-4 h-4 text-primary ml-auto" />}
+                    </div>
+                  );
+                })}
+                <Progress value={loadingProgress} className="mt-4 h-2" />
+                <p className="text-xs text-center text-muted-foreground">Querying Slayer Nodes infrastructure...</p>
+              </div>
+            </div>
+          )}
+
           {/* Results */}
-          {searched && (
+          {searched && !loading && (
             <div className="animate-fade-in">
               {result ? (
                 <div className="glass rounded-2xl p-8 text-center">
@@ -184,19 +220,16 @@ const StatusChecker = () => {
                       <div className="text-sm text-muted-foreground mb-1">ASN Number</div>
                       <div className="font-mono font-semibold">{result.asn_number}</div>
                     </div>
-                    
                     <div className="glass rounded-xl p-4">
                       <div className="text-sm text-muted-foreground mb-1">User Name</div>
                       <div className="font-semibold">{result.user_name}</div>
                     </div>
-                    
                     <div className="glass rounded-xl p-4">
                       <div className="text-sm text-muted-foreground mb-1">Status</div>
                       <div className={`inline-flex px-4 py-2 rounded-full border font-semibold ${getStatusColor(result.status)}`}>
                         {result.status.toUpperCase()}
                       </div>
                     </div>
-                    
                     {result.comments && (
                       <div className="glass rounded-xl p-4 text-left border border-primary/20">
                         <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
@@ -208,7 +241,6 @@ const StatusChecker = () => {
                         </div>
                       </div>
                     )}
-                    
                     <div className="glass rounded-xl p-4">
                       <div className="text-sm text-muted-foreground mb-1">Last Updated</div>
                       <div className="text-sm">{new Date(result.updated_at).toLocaleString()}</div>
@@ -235,7 +267,6 @@ const StatusChecker = () => {
           )}
         </div>
       </main>
-
       <Footer />
     </div>
   );

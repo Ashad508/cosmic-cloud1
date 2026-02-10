@@ -10,7 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { 
   Shield, Plus, Trash2, LogOut, ArrowLeft, Loader2, 
   RefreshCw, CheckCircle, Clock, XCircle, Edit2, Save, X,
-  Megaphone, MessageSquare, AlertTriangle, Power
+  Megaphone, MessageSquare, AlertTriangle, Power, Package,
+  Ban, Timer, Truck, Users as UsersIcon, Rocket, RotateCcw, PackageOpen
 } from "lucide-react";
 import {
   AlertDialog,
@@ -36,6 +37,18 @@ interface AsnEntry {
   updated_at: string;
 }
 
+interface OrderEntry {
+  id: string;
+  syn_number: string;
+  user_name: string;
+  service_name: string;
+  status: string;
+  expected_time: string | null;
+  comments: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Announcement {
   id: string;
   message: string;
@@ -46,6 +59,7 @@ interface Announcement {
 
 const AdminPanel = () => {
   const [entries, setEntries] = useState<AsnEntry[]>([]);
+  const [orders, setOrders] = useState<OrderEntry[]>([]);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -65,6 +79,19 @@ const AdminPanel = () => {
   const [newAnnouncement, setNewAnnouncement] = useState("");
   const [addingAnnouncement, setAddingAnnouncement] = useState(false);
 
+  // Order form
+  const [newSynNumber, setNewSynNumber] = useState("");
+  const [newOrderUserName, setNewOrderUserName] = useState("");
+  const [newServiceName, setNewServiceName] = useState("");
+  const [newOrderStatus, setNewOrderStatus] = useState("pending");
+  const [newExpectedTime, setNewExpectedTime] = useState("");
+  const [newOrderComments, setNewOrderComments] = useState("");
+  const [addingOrder, setAddingOrder] = useState(false);
+  const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
+  const [editOrderStatus, setEditOrderStatus] = useState("");
+  const [editOrderExpectedTime, setEditOrderExpectedTime] = useState("");
+  const [editOrderComments, setEditOrderComments] = useState("");
+
   // Maintenance mode
   const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [togglingMaintenance, setTogglingMaintenance] = useState(false);
@@ -75,6 +102,7 @@ const AdminPanel = () => {
     checkAuth();
     fetchEntries();
     fetchAnnouncements();
+    fetchOrders();
     fetchMaintenanceMode();
     
     // Set up realtime subscription
@@ -85,6 +113,9 @@ const AdminPanel = () => {
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "announcements" }, () => {
         fetchAnnouncements();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "order_entries" }, () => {
+        fetchOrders();
       })
       .on("postgres_changes", { event: "*", schema: "public", table: "site_settings" }, () => {
         fetchMaintenanceMode();
@@ -132,6 +163,77 @@ const AdminPanel = () => {
       toast.error("Failed to load entries");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("order_entries")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      setOrders(data || []);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
+
+  const addOrder = async () => {
+    if (!newSynNumber.trim() || !newOrderUserName.trim() || !newServiceName.trim()) {
+      toast.error("Please fill in SYN number, username, and service name");
+      return;
+    }
+    setAddingOrder(true);
+    try {
+      const { error } = await supabase.from("order_entries").insert({
+        syn_number: newSynNumber.trim(),
+        user_name: newOrderUserName.trim(),
+        service_name: newServiceName.trim(),
+        status: newOrderStatus,
+        expected_time: newExpectedTime.trim() || null,
+        comments: newOrderComments.trim() || null,
+      });
+      if (error) throw error;
+      toast.success("Order added successfully");
+      setNewSynNumber(""); setNewOrderUserName(""); setNewServiceName("");
+      setNewOrderStatus("pending"); setNewExpectedTime(""); setNewOrderComments("");
+      fetchOrders();
+    } catch (error) {
+      console.error("Error adding order:", error);
+      toast.error("Failed to add order");
+    } finally {
+      setAddingOrder(false);
+    }
+  };
+
+  const updateOrder = async (id: string) => {
+    try {
+      const { error } = await supabase.from("order_entries").update({
+        status: editOrderStatus,
+        expected_time: editOrderExpectedTime.trim() || null,
+        comments: editOrderComments.trim() || null,
+      }).eq("id", id);
+      if (error) throw error;
+      toast.success("Order updated");
+      setEditingOrderId(null);
+      fetchOrders();
+    } catch (error) {
+      console.error("Error updating order:", error);
+      toast.error("Failed to update order");
+    }
+  };
+
+  const deleteOrder = async (id: string) => {
+    if (!confirm("Delete this order entry?")) return;
+    try {
+      const { error } = await supabase.from("order_entries").delete().eq("id", id);
+      if (error) throw error;
+      toast.success("Order deleted");
+      fetchOrders();
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      toast.error("Failed to delete order");
     }
   };
 
@@ -329,15 +431,22 @@ const AdminPanel = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
-      case "approved":
-      case "active":
+      case "approved": case "active": case "order live":
         return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "pending":
-      case "processing":
+      case "pending": case "processing":
         return <Clock className="w-4 h-4 text-yellow-500" />;
-      case "rejected":
-      case "expired":
+      case "rejected": case "expired": case "cancelled":
         return <XCircle className="w-4 h-4 text-red-500" />;
+      case "received by team":
+        return <UsersIcon className="w-4 h-4 text-indigo-500" />;
+      case "on the way":
+        return <Truck className="w-4 h-4 text-cyan-500" />;
+      case "ready":
+        return <Rocket className="w-4 h-4 text-emerald-500" />;
+      case "out of stock":
+        return <PackageOpen className="w-4 h-4 text-orange-500" />;
+      case "refunded":
+        return <RotateCcw className="w-4 h-4 text-blue-500" />;
       default:
         return <Clock className="w-4 h-4 text-muted-foreground" />;
     }
@@ -345,15 +454,22 @@ const AdminPanel = () => {
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
-      case "approved":
-      case "active":
+      case "approved": case "active": case "order live":
         return "text-green-500 bg-green-500/10";
-      case "pending":
-      case "processing":
+      case "pending": case "processing":
         return "text-yellow-500 bg-yellow-500/10";
-      case "rejected":
-      case "expired":
+      case "rejected": case "expired": case "cancelled":
         return "text-red-500 bg-red-500/10";
+      case "received by team":
+        return "text-indigo-500 bg-indigo-500/10";
+      case "on the way":
+        return "text-cyan-500 bg-cyan-500/10";
+      case "ready":
+        return "text-emerald-500 bg-emerald-500/10";
+      case "out of stock":
+        return "text-orange-500 bg-orange-500/10";
+      case "refunded":
+        return "text-blue-500 bg-blue-500/10";
       default:
         return "text-muted-foreground bg-muted/10";
     }
@@ -388,10 +504,14 @@ const AdminPanel = () => {
       <main className="pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <Tabs defaultValue="asn" className="w-full">
-            <TabsList className="grid w-full max-w-lg grid-cols-3 mb-8">
+            <TabsList className="grid w-full max-w-2xl grid-cols-4 mb-8">
               <TabsTrigger value="asn" className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
                 ASN Entries
+              </TabsTrigger>
+              <TabsTrigger value="orders" className="flex items-center gap-2">
+                <Package className="w-4 h-4" />
+                Orders
               </TabsTrigger>
               <TabsTrigger value="announcements" className="flex items-center gap-2">
                 <Megaphone className="w-4 h-4" />
@@ -607,6 +727,162 @@ const AdminPanel = () => {
                             <div className="text-sm">
                               {entry.comments || <span className="text-muted-foreground italic">No comments</span>}
                             </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            {/* Orders Tab */}
+            <TabsContent value="orders">
+              {/* Add New Order */}
+              <div className="glass rounded-2xl p-6 mb-8">
+                <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  <Plus className="w-5 h-5 text-primary" />
+                  Add New Order Entry
+                </h2>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <Label className="text-sm mb-2 block">SYN Number</Label>
+                    <Input placeholder="e.g., SYN-12345" value={newSynNumber} onChange={(e) => setNewSynNumber(e.target.value)} className="bg-background/50" />
+                  </div>
+                  <div>
+                    <Label className="text-sm mb-2 block">User Name</Label>
+                    <Input placeholder="e.g., JohnDoe" value={newOrderUserName} onChange={(e) => setNewOrderUserName(e.target.value)} className="bg-background/50" />
+                  </div>
+                  <div>
+                    <Label className="text-sm mb-2 block">Service Name</Label>
+                    <Input placeholder="e.g., VPS Plan 2" value={newServiceName} onChange={(e) => setNewServiceName(e.target.value)} className="bg-background/50" />
+                  </div>
+                  <div>
+                    <Label className="text-sm mb-2 block">Status</Label>
+                    <Select value={newOrderStatus} onValueChange={setNewOrderStatus}>
+                      <SelectTrigger className="bg-background/50"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pending">Pending</SelectItem>
+                        <SelectItem value="processing">Processing</SelectItem>
+                        <SelectItem value="received by team">Received by Team</SelectItem>
+                        <SelectItem value="on the way">On The Way</SelectItem>
+                        <SelectItem value="ready">Ready (Waiting for deployment)</SelectItem>
+                        <SelectItem value="order live">Order Live</SelectItem>
+                        <SelectItem value="cancelled">Cancelled</SelectItem>
+                        <SelectItem value="rejected">Rejected</SelectItem>
+                        <SelectItem value="out of stock">Out Of Stock</SelectItem>
+                        <SelectItem value="refunded">Refunded</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-sm mb-2 block">Expected Time</Label>
+                    <Input placeholder="e.g., 2-3 hours" value={newExpectedTime} onChange={(e) => setNewExpectedTime(e.target.value)} className="bg-background/50" />
+                  </div>
+                  <div className="flex items-end">
+                    <Button onClick={addOrder} disabled={addingOrder} className="w-full">
+                      {addingOrder ? <Loader2 className="w-4 h-4 animate-spin" /> : <><Plus className="w-4 h-4 mr-2" />Add Order</>}
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-sm mb-2 block flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" /> Comments (Optional)
+                  </Label>
+                  <Textarea placeholder="Add any notes..." value={newOrderComments} onChange={(e) => setNewOrderComments(e.target.value)} className="bg-background/50" rows={2} />
+                </div>
+              </div>
+
+              {/* Orders List */}
+              <div className="glass rounded-2xl p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-lg font-semibold flex items-center gap-2">
+                    <Package className="w-5 h-5 text-primary" />
+                    Order Entries ({orders.length})
+                  </h2>
+                  <Button variant="outline" size="sm" onClick={fetchOrders}>
+                    <RefreshCw className="w-4 h-4 mr-2" /> Refresh
+                  </Button>
+                </div>
+
+                {orders.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">No orders yet.</div>
+                ) : (
+                  <div className="space-y-4">
+                    {orders.map((order) => (
+                      <div key={order.id} className="glass rounded-xl p-4 border border-border/50">
+                        <div className="flex flex-wrap items-center justify-between gap-4 mb-3">
+                          <div className="flex items-center gap-4 flex-wrap">
+                            <div>
+                              <div className="text-sm text-muted-foreground">SYN Number</div>
+                              <div className="font-mono font-semibold">{order.syn_number}</div>
+                            </div>
+                            <div>
+                              <div className="text-sm text-muted-foreground">User</div>
+                              <div className="font-semibold">{order.user_name}</div>
+                            </div>
+                            <div>
+                              <div className="text-sm text-muted-foreground">Service</div>
+                              <div className="font-semibold">{order.service_name}</div>
+                            </div>
+                            <div>
+                              <div className="text-sm text-muted-foreground">Status</div>
+                              {editingOrderId === order.id ? (
+                                <Select value={editOrderStatus} onValueChange={setEditOrderStatus}>
+                                  <SelectTrigger className="w-44 h-8 text-sm"><SelectValue /></SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="processing">Processing</SelectItem>
+                                    <SelectItem value="received by team">Received by Team</SelectItem>
+                                    <SelectItem value="on the way">On The Way</SelectItem>
+                                    <SelectItem value="ready">Ready</SelectItem>
+                                    <SelectItem value="order live">Order Live</SelectItem>
+                                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                                    <SelectItem value="rejected">Rejected</SelectItem>
+                                    <SelectItem value="out of stock">Out Of Stock</SelectItem>
+                                    <SelectItem value="refunded">Refunded</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              ) : (
+                                <span className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium ${getStatusColor(order.status)}`}>
+                                  {getStatusIcon(order.status)}
+                                  {order.status.toUpperCase()}
+                                </span>
+                              )}
+                            </div>
+                            <div>
+                              <div className="text-sm text-muted-foreground">Expected</div>
+                              {editingOrderId === order.id ? (
+                                <Input value={editOrderExpectedTime} onChange={(e) => setEditOrderExpectedTime(e.target.value)} placeholder="e.g., 2-3 hours" className="h-8 w-32 text-sm" />
+                              ) : (
+                                <div className="text-sm">{order.expected_time || "—"}</div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {editingOrderId === order.id ? (
+                              <>
+                                <Button variant="ghost" size="sm" onClick={() => updateOrder(order.id)}><Save className="w-4 h-4 text-green-500" /></Button>
+                                <Button variant="ghost" size="sm" onClick={() => setEditingOrderId(null)}><X className="w-4 h-4 text-muted-foreground" /></Button>
+                              </>
+                            ) : (
+                              <>
+                                <Button variant="ghost" size="sm" onClick={() => { setEditingOrderId(order.id); setEditOrderStatus(order.status); setEditOrderExpectedTime(order.expected_time || ""); setEditOrderComments(order.comments || ""); }}>
+                                  <Edit2 className="w-4 h-4 text-primary" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteOrder(order.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <div className="border-t border-border/50 pt-3 mt-3">
+                          <div className="text-sm text-muted-foreground mb-1 flex items-center gap-1"><MessageSquare className="w-3 h-3" /> Comments</div>
+                          {editingOrderId === order.id ? (
+                            <Textarea value={editOrderComments} onChange={(e) => setEditOrderComments(e.target.value)} placeholder="Add comments..." className="bg-background/50" rows={2} />
+                          ) : (
+                            <div className="text-sm">{order.comments || <span className="text-muted-foreground italic">No comments</span>}</div>
                           )}
                         </div>
                       </div>
