@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, 
   HardDrive, Gauge, Database, Clock, Lock, Check, ChevronRight,
-  Users, Activity, Timer, Infinity, Bot, ArrowLeft, Search
+  Users, Activity, Timer, Infinity, Bot, ArrowLeft, Search, Package
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -173,6 +173,10 @@ const Index = () => {
               <Search className="w-4 h-4" />
               Trial Status
             </Link>
+            <Link to="/order-tracker" className="text-sm text-accent hover:text-accent/80 transition flex items-center gap-1">
+              <Package className="w-4 h-4" />
+              Order Tracker
+            </Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -210,7 +214,11 @@ const Index = () => {
           </button>
           <Link to="/status-checker" className="flex flex-col items-center gap-1 text-accent">
             <Search className="w-5 h-5" />
-            <span className="text-xs">Status</span>
+            <span className="text-xs">Trial</span>
+          </Link>
+          <Link to="/order-tracker" className="flex flex-col items-center gap-1 text-accent">
+            <Package className="w-5 h-5" />
+            <span className="text-xs">Order</span>
           </Link>
         </div>
       </nav>

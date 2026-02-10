@@ -10,6 +10,7 @@ import TermsOfService from "./pages/TermsOfService";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import StatusChecker from "./pages/StatusChecker";
+import OrderTracker from "./pages/OrderTracker";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
 
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/status-checker" element={<StatusChecker />} />
+          <Route path="/order-tracker" element={<OrderTracker />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminPanel />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
