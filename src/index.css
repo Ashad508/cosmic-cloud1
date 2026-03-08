@@ -249,4 +249,66 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
   }
+
+  /* Minecraft Tier Colors */
+  .tier-stone { --tier-color: 0 0% 50%; }
+  .tier-copper { --tier-color: 25 80% 50%; }
+  .tier-iron { --tier-color: 0 0% 70%; }
+  .tier-obsidian { --tier-color: 270 60% 40%; }
+  .tier-bedrock { --tier-color: 0 0% 15%; }
+  .tier-invite { --tier-color: 160 84% 39%; }
+
+  .tier-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tier-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, hsl(var(--tier-color)), transparent);
+    opacity: 0.8;
+  }
+
+  .tier-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at top, hsl(var(--tier-color) / 0.08), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* Particle Background */
+  .mc-particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Shimmer text effect */
+  .text-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--foreground)) 0%,
+      hsl(var(--primary)) 40%,
+      hsl(var(--secondary)) 60%,
+      hsl(var(--foreground)) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.3), transparent);
+  }
 }
