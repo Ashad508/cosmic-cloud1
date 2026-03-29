@@ -27,7 +27,7 @@ interface OrderEntry {
 
 const LOADING_STEPS = [
   { label: "Initializing secure connection...", icon: Wifi, duration: 600 },
-  { label: "Reaching Slayer Nodes database...", icon: Server, duration: 800 },
+  { label: "Reaching Axo Nodes database...", icon: Server, duration: 800 },
   { label: "Querying order records...", icon: Database, duration: 700 },
   { label: "Verifying data integrity...", icon: ShieldCheck, duration: 500 },
   { label: "Results fetched successfully", icon: CheckCircle, duration: 400 },
@@ -110,9 +110,9 @@ const OrderTracker = () => {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={cosmicLogo} alt="Slayer Nodes" className="w-10 h-10 rounded-lg" />
+            <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
-              <h1 className="text-xl font-bold text-gradient">Slayer Nodes</h1>
+              <h1 className="text-xl font-bold text-gradient">Axo Nodes</h1>
               <span className="text-xs text-muted-foreground">Order Tracker</span>
             </div>
           </Link>
@@ -193,7 +193,7 @@ const OrderTracker = () => {
                   );
                 })}
                 <Progress value={loadingProgress} className="mt-4 h-2" />
-                <p className="text-xs text-center text-muted-foreground">Querying Slayer Nodes infrastructure...</p>
+                <p className="text-xs text-center text-muted-foreground">Querying Axo Nodes infrastructure...</p>
               </div>
             </div>
           )}

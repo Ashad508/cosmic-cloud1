@@ -13,10 +13,10 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <img src={cosmicLogo} alt="Slayer Nodes" className="w-10 h-10 rounded-lg" />
+              <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
               <div>
-                <h3 className="text-xl font-bold text-gradient">Slayer Nodes</h3>
-                <p className="text-xs text-muted-foreground">Enterprise Hosting Solutions</p>
+                <h3 className="text-xl font-bold text-gradient">Axo Nodes</h3>
+                <p className="text-xs text-muted-foreground">Powering the Way</p>
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed max-w-md text-sm">
@@ -101,14 +101,14 @@ const Footer = () => {
         {/* SEO Keywords */}
         <div className="py-4 border-t border-border mb-4">
           <p className="text-xs text-muted-foreground text-center">
-            Slayer Nodes • Enterprise Hosting • VPS Hosting • Minecraft Hosting • Domain Registration • 
+            Axo Nodes • Enterprise Hosting • VPS Hosting • Minecraft Hosting • Domain Registration • 
             Cloud Server Hosting • Game Server Hosting • Web Hosting • Professional Hosting • India 🇮🇳
           </p>
         </div>
 
         {/* Bottom Bar */}
         <div className="pt-4 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4 text-muted-foreground text-sm">
-          <p>© 2025 Slayer Nodes. All rights reserved.</p>
+          <p>© 2025 Axo Nodes. All rights reserved.</p>
           <a 
             href="mailto:ashad.umar355@gmail.com"
             className="hover:text-foreground transition-colors"

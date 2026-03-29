@@ -198,10 +198,10 @@ const Index = () => {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50 announcement-offset">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigateTo("home")}>
-            <img src={cosmicLogo} alt="Slayer Nodes" className="w-10 h-10 rounded-lg" />
+            <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
-              <h1 className="text-xl font-bold text-gradient">Slayer Nodes</h1>
-              <span className="text-xs text-muted-foreground">Enterprise</span>
+              <h1 className="text-xl font-bold text-gradient">Axo Nodes</h1>
+              <span className="text-xs text-muted-foreground">Powering the Way</span>
             </div>
           </div>
 
@@ -393,7 +393,7 @@ const Index = () => {
           <section className="py-20 px-4 bg-card/30">
             <div className="container mx-auto max-w-6xl">
               <div className="text-center mb-16">
-                <h2 className="text-3xl font-bold mb-4">Enterprise Hosting Solutions</h2>
+                <h2 className="text-3xl font-bold mb-4">Powering the Way</h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
                   Choose from our portfolio of professional hosting services
                 </p>
@@ -480,7 +480,7 @@ const Index = () => {
                   <h3 className="text-xl font-semibold mb-2">Shadow Slayer</h3>
                   <p className="text-sm text-muted-foreground mb-4">Founder & CEO</p>
                   <p className="text-sm text-muted-foreground">
-                    With a vision to revolutionize cloud infrastructure, Shadow Slayer founded Slayer Nodes to 
+                    With a vision to revolutionize cloud infrastructure, Shadow Slayer founded Axo Nodes to 
                     provide enterprise-grade hosting solutions without enterprise-grade complexity or pricing.
                   </p>
                 </div>
@@ -692,7 +692,7 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-primary/10"></div>
               <div className="relative">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 mb-4">
-                  <span className="text-sm font-medium">⭐ Slayer Nodes™ – KVM VPS Plans (India 🇮🇳) 💎</span>
+                  <span className="text-sm font-medium">⭐ Axo Nodes™ – KVM VPS Plans (India 🇮🇳) 💎</span>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
                   <span className="text-shimmer">Enterprise Cloud Infrastructure</span>
@@ -810,7 +810,7 @@ const Index = () => {
                   <Rocket className="w-16 h-16 text-primary mx-auto mb-4" />
                   <h3 className="text-2xl font-bold mb-2">Custom Enterprise Solutions</h3>
                   <p className="text-muted-foreground mb-6">
-                    For Enterprise Plans, make a ticket at Slayer Nodes Discord and ask us for customized solutions.
+                    For Enterprise Plans, make a ticket at Axo Nodes Discord and ask us for customized solutions.
                   </p>
                   <Button size="lg" onClick={() => window.open(DISCORD_SERVER, "_blank")}>
                     Contact for Enterprise
@@ -901,7 +901,7 @@ const Index = () => {
             
             <div className="text-center mb-12">
               <h2 className="text-4xl font-bold mb-4">Domain Registration</h2>
-              <p className="text-muted-foreground">Secure your perfect domain with Slayer Nodes protection</p>
+              <p className="text-muted-foreground">Secure your perfect domain with Axo Nodes protection</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -935,7 +935,7 @@ const Index = () => {
             <div className="glass rounded-2xl p-6 text-center">
               <div className="flex items-center justify-center gap-2 text-sm">
                 <Shield className="w-5 h-5 text-accent" />
-                <span>All Domains are in secure protection from Slayer Nodes</span>
+                <span>All Domains are in secure protection from Axo Nodes</span>
               </div>
             </div>
           </div>
