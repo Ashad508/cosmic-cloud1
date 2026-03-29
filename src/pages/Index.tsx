@@ -201,7 +201,7 @@ const Index = () => {
             <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
               <h1 className="text-xl font-bold text-gradient">Axo Nodes</h1>
-              <span className="text-xs text-muted-foreground">Enterprise</span>
+              <span className="text-xs text-muted-foreground">Powering the Way</span>
             </div>
           </div>
 
