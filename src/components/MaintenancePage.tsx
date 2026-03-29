@@ -25,7 +25,7 @@ const MaintenancePage = () => {
           <div className="relative group">
             <img 
               src={cosmicLogo} 
-              alt="Slayer Nodes" 
+              alt="Axo Nodes" 
               className="w-20 h-20 rounded-xl shadow-lg border border-border/30 transition-transform duration-300 group-hover:scale-105"
             />
             <div className="absolute -bottom-1.5 -right-1.5 bg-destructive rounded-full p-1.5 shadow-md">
@@ -82,7 +82,7 @@ const MaintenancePage = () => {
 
         {/* Footer */}
         <div className="mt-14 text-xs text-muted-foreground/70">
-          <p>Slayer Nodes™ • Enterprise Infrastructure</p>
+          <p>Axo Nodes™ • Enterprise Infrastructure</p>
         </div>
       </div>
     </div>
