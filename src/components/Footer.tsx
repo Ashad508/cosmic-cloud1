@@ -16,7 +16,7 @@ const Footer = () => {
               <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
               <div>
                 <h3 className="text-xl font-bold text-gradient">Axo Nodes</h3>
-                <p className="text-xs text-muted-foreground">Enterprise Hosting Solutions</p>
+                <p className="text-xs text-muted-foreground">Powering the Way</p>
               </div>
             </div>
             <p className="text-muted-foreground leading-relaxed max-w-md text-sm">

@@ -393,7 +393,7 @@ const Index = () => {
           <section className="py-20 px-4 bg-card/30">
             <div className="container mx-auto max-w-6xl">
               <div className="text-center mb-16">
-                <h2 className="text-3xl font-bold mb-4">Enterprise Hosting Solutions</h2>
+                <h2 className="text-3xl font-bold mb-4">Powering the Way</h2>
                 <p className="text-muted-foreground max-w-2xl mx-auto">
                   Choose from our portfolio of professional hosting services
                 </p>
