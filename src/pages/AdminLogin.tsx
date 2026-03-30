@@ -62,7 +62,7 @@ const AdminLogin = () => {
       
       <div className="w-full max-w-md relative z-10">
         <Link to="/" className="flex items-center justify-center gap-3 mb-8">
-          <img src={cosmicLogo} alt="Axo Nodes" className="w-12 h-12 rounded-lg" />
+          <img src={axoLogo} alt="Axo Nodes" className="w-12 h-12 rounded-lg" />
           <div>
             <h1 className="text-2xl font-bold text-gradient">Axo Nodes</h1>
             <span className="text-xs text-muted-foreground">Admin Panel</span>

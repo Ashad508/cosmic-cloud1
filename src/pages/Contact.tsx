@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Mail, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import cosmicLogo from "@/assets/cosmic-cloud-logo.png";
+import axoLogo from "@/assets/cosmic-cloud-logo.png";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Contact = () => {
       <header className="border-b border-border backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img src={cosmicLogo} alt="Cosmic Cloud" className="w-12 h-12" />
+            <img src={axoLogo} alt="Cosmic Cloud" className="w-12 h-12" />
             <div>
               <h1 className="text-2xl font-bold text-cosmic-gradient">Cosmic Cloud</h1>
               <p className="text-xs text-muted-foreground">Premium Hosting Solutions</p>

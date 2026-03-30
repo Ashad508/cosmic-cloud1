@@ -24,7 +24,7 @@ const MaintenancePage = () => {
         <div className="mb-8 flex justify-center">
           <div className="relative group">
             <img 
-              src={cosmicLogo} 
+              src={axoLogo} 
               alt="Axo Nodes" 
               className="w-20 h-20 rounded-xl shadow-lg border border-border/30 transition-transform duration-300 group-hover:scale-105"
             />
