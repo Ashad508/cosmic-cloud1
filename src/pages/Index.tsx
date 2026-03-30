@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenancePage from "@/components/MaintenancePage";
 import { supabase } from "@/integrations/supabase/client";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
 const DISCORD_PURCHASE = "https://discord.com/channels/1463541808503062624/1463543201620037843";
