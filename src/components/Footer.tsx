@@ -1,5 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
 

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { Lock, ArrowLeft, Loader2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");

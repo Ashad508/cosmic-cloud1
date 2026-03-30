@@ -177,7 +177,7 @@ const Index = () => {
       <header className="fixed top-8 left-0 right-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl announcement-offset">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigateTo("home")}>
-            <img src={cosmicLogo} alt="Axo Nodes" className="w-9 h-9 rounded-lg" />
+            <img src={axoLogo} alt="Axo Nodes" className="w-9 h-9 rounded-lg" />
             <div>
               <h1 className="text-lg font-bold text-foreground">Axo Nodes</h1>
               <span className="text-[10px] text-muted-foreground tracking-widest uppercase">Powering the Way</span>

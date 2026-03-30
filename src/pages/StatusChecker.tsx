@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Search, CheckCircle, XCircle, Clock, ArrowLeft, MessageSquare, Database, Server, Wifi, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 interface AsnEntry {
   asn_number: string;

@@ -1,6 +1,6 @@
 import { Server, MessageSquare, Wrench, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 import { useEffect, useState } from "react";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
