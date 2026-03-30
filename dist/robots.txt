@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://cosmiccloud.lovable.app/sitemap.xml
