@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: '/cosmic-cloud1/',  // ✅ THIS LINE FIXES THE WHITE SCREEN
+  base: '/cosmic-cloud1/',  // ✅ THIS LINE FIXES HE WHITE SCREEN
   server: {
     host: "::",
     port: 8080,
