@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axoLogo from "@/assets/cosmic-cloud-logo.png";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 const TermsOfService = () => {
   const navigate = useNavigate();
