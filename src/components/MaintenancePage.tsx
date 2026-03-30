@@ -1,6 +1,6 @@
 import { Server, MessageSquare, Wrench, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 import { useEffect, useState } from "react";
 
 const DISCORD_SERVER = "https://discord.gg/gTAVRXeFVa";
@@ -24,7 +24,7 @@ const MaintenancePage = () => {
         <div className="mb-8 flex justify-center">
           <div className="relative group">
             <img 
-              src={cosmicLogo} 
+              src={axoLogo} 
               alt="Axo Nodes" 
               className="w-20 h-20 rounded-xl shadow-lg border border-border/30 transition-transform duration-300 group-hover:scale-105"
             />

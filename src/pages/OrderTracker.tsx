@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 interface OrderEntry {
   syn_number: string;
@@ -110,7 +110,7 @@ const OrderTracker = () => {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
-            <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
+            <img src={axoLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
               <h1 className="text-xl font-bold text-gradient">Axo Nodes</h1>
               <span className="text-xs text-muted-foreground">Order Tracker</span>
