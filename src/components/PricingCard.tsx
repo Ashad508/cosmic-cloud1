@@ -16,7 +16,7 @@ interface PricingCardProps {
 
 export const PricingCard = ({ title, specs, price, currency = "PKR", featured = false, delay = 0 }: PricingCardProps) => {
   const handlePurchase = () => {
-    window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank");
+    window.open("https://discord.com/channels/1463541808503062624/1463543201620037843", "_blank");
   };
 
   const isBoostPlan = price.includes("Boost");
