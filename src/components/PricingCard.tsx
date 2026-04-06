@@ -36,7 +36,7 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
       )}
       
       <div className="text-center mb-6">
-        <h3 className="text-xl font-display font-bold mb-2 text-cosmic-gradient tracking-wide">{title}</h3>
+        <h3 className="text-xl font-bold mb-2 text-gradient tracking-wide">{title}</h3>
       </div>
 
       <div className="space-y-3 mb-6">
