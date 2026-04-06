@@ -25,7 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import cosmicLogo from "@/assets/cosmic-cloud-logo-new.jpeg";
+import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
 interface AsnEntry {
   id: string;
@@ -481,7 +481,7 @@ const AdminPanel = () => {
       <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={cosmicLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
+            <img src={axoLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
               <h1 className="text-xl font-bold text-gradient">Admin Panel</h1>
               <span className="text-xs text-muted-foreground">Management Console</span>

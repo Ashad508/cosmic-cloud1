@@ -16,15 +16,15 @@ interface PricingCardProps {
 
 export const PricingCard = ({ title, specs, price, currency = "PKR", featured = false, delay = 0 }: PricingCardProps) => {
   const handlePurchase = () => {
-    window.open("https://discord.com/channels/1413463825851875328/1413463826896126056", "_blank");
+    window.open("https://discord.com/channels/1463541808503062624/1463543201620037843", "_blank");
   };
 
   const isBoostPlan = price.includes("Boost");
 
   return (
     <Card 
-      className={`relative p-6 transition-all duration-300 hover:scale-[1.02] card-glow ${
-        featured ? "border-primary cosmic-glow bg-gradient-to-b from-primary/10 to-card" : "border-border hover:border-primary/50"
+      className={`relative p-6 transition-all duration-300 hover:scale-[1.02] ${
+        featured ? "border-primary/40 ring-1 ring-primary/20 bg-gradient-to-b from-primary/10 to-card" : "border-border hover:border-primary/50"
       }`}
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -35,7 +35,7 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
       )}
       
       <div className="text-center mb-6">
-        <h3 className="text-xl font-display font-bold mb-2 text-cosmic-gradient tracking-wide">{title}</h3>
+        <h3 className="text-xl font-bold mb-2 text-gradient tracking-wide">{title}</h3>
       </div>
 
       <div className="space-y-3 mb-6">

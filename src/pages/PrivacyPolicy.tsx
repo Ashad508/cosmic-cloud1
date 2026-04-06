@@ -2,20 +2,20 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axoLogo from "@/assets/axo-nodes-logo.jpg";
+import Footer from "@/components/Footer";
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border backdrop-blur-sm sticky top-0 z-50 bg-background/80">
+      <header className="border-b border-border/30 backdrop-blur-xl sticky top-0 z-50 bg-background/80">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img src={axoLogo} alt="Cosmic Cloud" className="w-12 h-12" />
+            <img src={axoLogo} alt="Axo Nodes" className="w-10 h-10 rounded-lg" />
             <div>
-              <h1 className="text-2xl font-bold text-cosmic-gradient">Cosmic Cloud</h1>
-              <p className="text-xs text-muted-foreground">Premium Hosting Solutions</p>
+              <h1 className="text-xl font-bold text-gradient">Axo Nodes</h1>
+              <p className="text-xs text-muted-foreground tracking-widest uppercase">Powering the Way</p>
             </div>
           </div>
           <Button variant="ghost" onClick={() => navigate('/')}>
@@ -25,16 +25,15 @@ const PrivacyPolicy = () => {
         </div>
       </header>
 
-      {/* Content */}
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-cosmic-gradient">Privacy Policy</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">Privacy <span className="text-gradient">Policy</span></h1>
         <p className="text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
 
         <div className="space-y-8 text-foreground">
           <section>
             <h2 className="text-2xl font-semibold mb-4">1. Information We Collect</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              At Cosmic Cloud, we collect information that you provide directly to us when you create an account, 
+              At Axo Nodes, we collect information that you provide directly to us when you create an account, 
               purchase our services, or communicate with us. This includes your name, email address, billing information, 
               and any other information you choose to provide.
             </p>
@@ -46,9 +45,7 @@ const PrivacyPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">2. How We Use Your Information</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              We use the information we collect to:
-            </p>
+            <p className="text-muted-foreground leading-relaxed mb-4">We use the information we collect to:</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
               <li>Provide, maintain, and improve our hosting services</li>
               <li>Process transactions and send related information</li>
@@ -67,7 +64,7 @@ const PrivacyPolicy = () => {
             <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
               <li>With service providers who perform services on our behalf</li>
               <li>To comply with legal obligations</li>
-              <li>To protect the rights and safety of Cosmic Cloud and our users</li>
+              <li>To protect the rights and safety of Axo Nodes and our users</li>
               <li>With your consent or at your direction</li>
             </ul>
           </section>
@@ -91,9 +88,7 @@ const PrivacyPolicy = () => {
 
           <section>
             <h2 className="text-2xl font-semibold mb-4">6. Your Rights</h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              You have the right to:
-            </p>
+            <p className="text-muted-foreground leading-relaxed mb-4">You have the right to:</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
               <li>Access and receive a copy of your personal information</li>
               <li>Correct inaccurate personal information</li>
@@ -123,8 +118,7 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-semibold mb-4">9. Children's Privacy</h2>
             <p className="text-muted-foreground leading-relaxed">
               Our services are not intended for children under 13 years of age. We do not knowingly collect personal 
-              information from children under 13. If you are a parent or guardian and believe your child has provided 
-              us with personal information, please contact us.
+              information from children under 13.
             </p>
           </section>
 
@@ -140,11 +134,13 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-semibold mb-4">11. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
               If you have any questions about this Privacy Policy, please contact us through our Discord server or 
-              email us at the address provided on our contact page.
+              email us at ashad.umar355@gmail.com.
             </p>
           </section>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
