@@ -26,7 +26,6 @@ export const PricingCard = ({ title, specs, price, currency = "PKR", featured = 
       className={`relative p-6 transition-all duration-300 hover:scale-[1.02] ${
         featured ? "border-primary/40 ring-1 ring-primary/20 bg-gradient-to-b from-primary/10 to-card" : "border-border hover:border-primary/50"
       }`}
-      }`}
       style={{ animationDelay: `${delay}ms` }}
     >
       {featured && (
