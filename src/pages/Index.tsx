@@ -4,7 +4,7 @@ import {
   Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, 
   HardDrive, Gauge, Database, Clock, Lock, Check, ChevronRight,
   Users, Activity, Timer, Infinity, ArrowLeft, Search, Package,
-  Star, Sparkles, AlertTriangle, Monitor, Wifi, Headphones
+  Star, Sparkles, Monitor, Wifi, Headphones
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
