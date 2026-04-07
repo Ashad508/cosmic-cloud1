@@ -254,7 +254,7 @@ const Index = () => {
       {activeView === "home" && (
         <div className="animate-fade-in">
           {/* Hero Section */}
-          <section className="relative pt-40 pb-24 px-4 overflow-hidden">
+          <section className="relative pt-32 pb-24 px-4 overflow-hidden">
             <div className="absolute inset-0 grid-bg"></div>
             <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]"></div>
             <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-[120px]"></div>
