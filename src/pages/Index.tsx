@@ -200,6 +200,10 @@ const Index = () => {
               <Search className="w-3.5 h-3.5" />
               Trial Status
             </Link>
+            <a href="https://status.axonetwork.fun/" target="_blank" rel="noopener noreferrer" className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all flex items-center gap-1.5">
+              <Activity className="w-3.5 h-3.5" />
+              Status
+            </a>
             <Link to="/order-tracker" className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all flex items-center gap-1.5">
               <Package className="w-3.5 h-3.5" />
               Orders
