@@ -163,15 +163,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <AnnouncementBanner />
 
-      {/* Dubai Warning Banner */}
-      <div className="fixed top-0 left-0 right-0 z-[70] bg-gradient-to-r from-amber-600/90 to-orange-600/90 backdrop-blur-sm text-white py-2 px-4 announcement-warning">
-        <div className="container mx-auto flex items-center justify-center gap-2">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          <p className="text-xs sm:text-sm font-medium text-center">
-            ⚠️ Recent disruptions in the Dubai/DXB region may temporarily affect some of our machines. Our team is actively monitoring and working to ensure maximum uptime.
-          </p>
-        </div>
-      </div>
       
       {/* Navigation */}
       <header className="fixed top-8 left-0 right-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl announcement-offset">
