@@ -46,6 +46,16 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <a 
+                  href="https://status.axonetwork.fun/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Server Status
+                </a>
+              </li>
+              <li>
                 <button 
                   onClick={() => navigate('/contact')}
                   className="text-muted-foreground hover:text-primary transition-colors"
