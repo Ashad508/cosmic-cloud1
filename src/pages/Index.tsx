@@ -4,7 +4,7 @@ import {
   Server, Cpu, Shield, Zap, Mail, MessageSquare, Globe, Rocket, 
   HardDrive, Gauge, Database, Clock, Lock, Check, ChevronRight,
   Users, Activity, Timer, Infinity, ArrowLeft, Search, Package,
-  Star, Sparkles, AlertTriangle, Monitor, Wifi, Headphones
+  Star, Sparkles, Monitor, Wifi, Headphones
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
@@ -163,18 +163,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <AnnouncementBanner />
 
-      {/* Dubai Warning Banner */}
-      <div className="fixed top-0 left-0 right-0 z-[70] bg-gradient-to-r from-amber-600/90 to-orange-600/90 backdrop-blur-sm text-white py-2 px-4 announcement-warning">
-        <div className="container mx-auto flex items-center justify-center gap-2">
-          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          <p className="text-xs sm:text-sm font-medium text-center">
-            ⚠️ Recent disruptions in the Dubai/DXB region may temporarily affect some of our machines. Our team is actively monitoring and working to ensure maximum uptime.
-          </p>
-        </div>
-      </div>
       
       {/* Navigation */}
-      <header className="fixed top-8 left-0 right-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl announcement-offset">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl announcement-offset">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigateTo("home")}>
             <img src={axoLogo} alt="Axo Nodes" className="w-9 h-9 rounded-lg" />
@@ -209,6 +200,10 @@ const Index = () => {
               <Search className="w-3.5 h-3.5" />
               Trial Status
             </Link>
+            <a href="https://status.axonetwork.fun/" target="_blank" rel="noopener noreferrer" className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all flex items-center gap-1.5">
+              <Activity className="w-3.5 h-3.5" />
+              Status
+            </a>
             <Link to="/order-tracker" className="px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all flex items-center gap-1.5">
               <Package className="w-3.5 h-3.5" />
               Orders
@@ -259,7 +254,7 @@ const Index = () => {
       {activeView === "home" && (
         <div className="animate-fade-in">
           {/* Hero Section */}
-          <section className="relative pt-40 pb-24 px-4 overflow-hidden">
+          <section className="relative pt-32 pb-24 px-4 overflow-hidden">
             <div className="absolute inset-0 grid-bg"></div>
             <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]"></div>
             <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-[120px]"></div>
