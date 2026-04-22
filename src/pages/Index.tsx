@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
 import MaintenancePage from "@/components/MaintenancePage";
+import { ConsoleLauncher } from "@/components/VpsConsole";
+import GlobalLocations from "@/components/GlobalLocations";
 import { supabase } from "@/integrations/supabase/client";
 import axoLogo from "@/assets/axo-nodes-logo.jpg";
 
@@ -292,6 +294,7 @@ const Index = () => {
                   >
                     Learn More
                   </Button>
+                  <ConsoleLauncher />
                 </div>
 
                 {/* Feature pills */}
@@ -405,6 +408,9 @@ const Index = () => {
               </div>
             </div>
           </section>
+
+          {/* Global Locations */}
+          <GlobalLocations />
 
           {/* About Section */}
           <section className="py-20 px-4 border-t border-border/10">
