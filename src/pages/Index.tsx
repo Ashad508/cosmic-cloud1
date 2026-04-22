@@ -409,6 +409,9 @@ const Index = () => {
             </div>
           </section>
 
+          {/* Global Locations */}
+          <GlobalLocations />
+
           {/* About Section */}
           <section className="py-20 px-4 border-t border-border/10">
             <div className="container mx-auto max-w-5xl">
