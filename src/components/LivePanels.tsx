@@ -23,10 +23,10 @@ const useReveal = <T extends HTMLElement>() => {
 };
 
 /* ---------- shared progress bar with smooth animation ---------- */
-const Bar = ({ value, color = "primary" }: { value: number; color?: string }) => (
+const Bar = ({ value, gradient = "from-primary to-accent" }: { value: number; gradient?: string }) => (
   <div className="h-1.5 rounded-full bg-background/60 overflow-hidden">
     <div
-      className={`h-full bg-gradient-to-r from-${color} to-accent rounded-full transition-[width] duration-[1500ms] ease-out`}
+      className={`h-full bg-gradient-to-r ${gradient} rounded-full transition-[width] duration-[1500ms] ease-out`}
       style={{ width: `${value}%` }}
     />
   </div>
