@@ -193,14 +193,14 @@ const VpsPanel = () => {
               <span className="flex items-center gap-1.5"><Gauge className="w-3 h-3" /> CPU LOAD</span>
               <span className="font-mono text-foreground">{Math.round(load)}%</span>
             </div>
-            <Bar value={load} color="secondary" />
+            <Bar value={load} gradient="from-secondary to-primary" />
           </div>
           <div className="rounded-lg border border-border/30 bg-background/40 p-3">
             <div className="flex items-center justify-between mb-2 text-[10px] text-muted-foreground">
               <span className="flex items-center gap-1.5"><Activity className="w-3 h-3" /> NETWORK</span>
               <span className="font-mono text-foreground">{(net * 12).toFixed(0)} Mbps</span>
             </div>
-            <Bar value={net} color="secondary" />
+            <Bar value={net} gradient="from-secondary to-accent" />
           </div>
         </div>
 
