@@ -318,26 +318,43 @@ const ClientPanel = () => {
 };
 
 /* ---------- MAIN SECTION ---------- */
-const panels = [
+type PanelColor = "primary" | "secondary" | "accent";
+
+const colorClasses: Record<PanelColor, { chip: string; btn: string }> = {
+  primary: {
+    chip: "border-primary/30 bg-primary/5 text-primary",
+    btn: "bg-primary text-primary-foreground",
+  },
+  secondary: {
+    chip: "border-secondary/30 bg-secondary/5 text-secondary",
+    btn: "bg-secondary text-secondary-foreground",
+  },
+  accent: {
+    chip: "border-accent/30 bg-accent/5 text-accent",
+    btn: "bg-accent text-accent-foreground",
+  },
+};
+
+const panels: { title: string; desc: string; url: string; color: PanelColor; Component: React.FC }[] = [
   {
     title: "Game Panel",
     desc: "Manage Minecraft servers — start, stop, restart, console & file editor.",
     url: "https://panel.axonodes.fun",
-    color: "primary" as const,
+    color: "primary",
     Component: McPanel,
   },
   {
     title: "VPS Control Panel",
     desc: "Full root, live metrics, reinstall, console & network tools.",
     url: "https://cpanel.axonodes.fun",
-    color: "secondary" as const,
+    color: "secondary",
     Component: VpsPanel,
   },
   {
     title: "Client Area",
     desc: "Billing, invoices, tickets and your full service overview.",
     url: "https://client.axonodes.fun",
-    color: "accent" as const,
+    color: "accent",
     Component: ClientPanel,
   },
 ];
@@ -374,7 +391,7 @@ const LivePanels = () => {
                 className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}
               >
                 <div>
-                  <div className={`inline-flex items-center gap-2 mb-4 px-2.5 py-1 rounded-md border border-${p.color}/30 bg-${p.color}/5 text-${p.color} text-[11px] font-semibold tracking-wider uppercase`}>
+                  <div className={`inline-flex items-center gap-2 mb-4 px-2.5 py-1 rounded-md border ${colorClasses[p.color].chip} text-[11px] font-semibold tracking-wider uppercase`}>
                     <Globe className="w-3 h-3" />
                     {new URL(p.url).hostname}
                   </div>
@@ -386,7 +403,7 @@ const LivePanels = () => {
                       href={p.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-${p.color} text-${p.color}-foreground text-sm font-semibold hover:opacity-90 transition group`}
+                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg ${colorClasses[p.color].btn} text-sm font-semibold hover:opacity-90 transition group`}
                     >
                       Open panel
                       <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition" />
